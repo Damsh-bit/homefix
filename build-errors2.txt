@@ -1,0 +1,14 @@
+﻿
+> homefix-react@0.0.0 build
+> vite build
+
+[36mvite v8.0.3 [32mbuilding client environment for production...[36m[39m
+[2K
+transforming...Ô£ô 1732 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.46 kB Ôöé gzip:  0.30 kB
+dist/assets/index-IOgDHHAM.css    4.55 kB Ôöé gzip:  1.67 kB
+dist/assets/index-LhP4X-ZU.js   278.91 kB Ôöé gzip: 85.77 kB
+
+[32mÔ£ô built in 291ms[39m

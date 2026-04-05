@@ -1,0 +1,92 @@
+[
+  {
+    "id": "man_1",
+    "author_name": "Edward Castillo",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ACB-R5R...",
+    "rating": 5,
+    "text": "We love our new patio! Fix My Home LLC made the whole process easy, from fair pricing and great financing to a stress-free build. Manuel was fantastic—no pushy sales tactics, no prying questions, just honest advice and genuine interest in our vision. Miguel (the owner) and the entire crew were responsive, skilled, and friendly, addressing any concerns within hours. The craftsmanship is top-notch, and the finished patio is exactly what we hoped for. Highly recommend.",
+    "relative_time_description": "7 months ago",
+    "verified": true,
+    "images": [
+      "/assets/Resenas/Resena-5/1.webp",
+      "/assets/Resenas/Resena-5/2.webp",
+      "/assets/Resenas/Resena-5/3.webp"
+    ]
+  },
+  {
+    "id": "man_2",
+    "author_name": "Eric Robinson",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ACB-R5S...",
+    "rating": 5,
+    "text": "Carlos Martinez with Fix My Home LLC did a fantastic job extending my patio! Carlos was very respectful, professional and knowledgeable. He kept me updated daily on what would be going on during construction. His construction crews were very very skillful and kept the area of my backyard clean. At the end of each day they cleaned up and organized and stacked neatly the remaining lumber. I would highly recommend Carlos and Fix My Home LLC plus his quote was $79,000 less!!!⭐️⭐️⭐️⭐️⭐️",
+    "relative_time_description": "3 weeks ago",
+    "verified": true,
+    "images": [
+      "/assets/Resenas/Resena-4/1.webp",
+      "/assets/Resenas/Resena-4/2.webp",
+      "/assets/Resenas/Resena-4/3.webp",
+      "/assets/Resenas/Resena-4/4.webp",
+      "/assets/Resenas/Resena-4/5.webp",
+      "/assets/Resenas/Resena-4/6.webp",
+      "/assets/Resenas/Resena-4/7.webp"
+    ]
+  },
+  {
+    "id": "man_3",
+    "author_name": "Daniel Ramirez",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ACB-R5T...",
+    "rating": 4,
+    "text": "Exceptional craftsmanship! Miguel and his crew gave me several designs to choose from, helped me throughout the entire process with HOA, material selection and even the financing. I was very happy with the outcome of the project and the service they provided along the way! 5 Stars! Would highly reccomend",
+    "relative_time_description": "3 years ago",
+    "verified": true,
+    "images": [
+      "/assets/Resenas/Resena-3/1.webp",
+      "/assets/Resenas/Resena-3/2.webp",
+      "/assets/Resenas/Resena-3/3.webp",
+      "/assets/Resenas/Resena-3/4.webp",
+      "/assets/Resenas/Resena-3/5.webp",
+      "/assets/Resenas/Resena-3/6.webp",
+      "/assets/Resenas/Resena-3/7.webp"
+    ]
+  },
+  {
+    "id": "man_4",
+    "author_name": "Ken Hodgkinson",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ACB-R5U...",
+    "rating": 5,
+    "text": "Fix my home LLC was a pleasure to work with. Sam and his team were always available and responded to every desire during construction. I highly recommend them.",
+    "relative_time_description": "2 years ago",
+    "verified": true,
+    "images": [
+      "/assets/Resenas/Resena-2/ken.webp"
+    ]
+  },
+  {
+    "id": "man_5_prayank",
+    "author_name": "Prayank Jain",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ACB-R5S-PrayankPlaceholder",
+    "rating": 5,
+    "text": "I am a pilot and often away from home, so I needed a contractor I could truly rely on. Jose, Miguel and their team absolutely exceeded my expectations. From start to finish, their work was flawless, and their attention to detail was second to none.",
+    "relative_time_description": "Hace 6 meses",
+    "verified": true,
+    "images": [
+      "/assets/Resenas/Resena-1/unnamed.webp",
+      "/assets/Resenas/Resena-1/unnamed (1).webp",
+      "/assets/Resenas/Resena-1/unnamed (2).webp",
+      "/assets/Resenas/Resena-1/unnamed (3).webp"
+    ]
+  },
+  {
+    "id": "man_6",
+    "author_name": "Quyen NK Tran",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a-/ACB-R5S-PrayankPlaceholder",
+    "rating": 5,
+    "text": "Absolutely amazing work! Negotiation process was seamless. Everyone was professional, arriving on time and notified us if late. They beat all expectations",
+    "relative_time_description": "Hace 6 meses",
+    "verified": true,
+    "images": [
+      "/assets/Resenas/Resena-6/1.webp",
+      "/assets/Resenas/Resena-6/2.webp"
+    ]
+  }
+]
