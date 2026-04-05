@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
+import {
   Check, ChevronRight, ChevronLeft, Phone
 } from 'lucide-react'
 
@@ -74,7 +74,7 @@ const STEPS = [
     optional: true,
     options: [
       { id: 'bbq', label: 'BBQ Station', desc: 'Built-in grill and prep area', img: '/assets/materials/bbq-station.jpg', popular: true, price: 4000 },
-      { id: 'fireplace', label: 'Outdoor Fireplace', desc: 'Built-in fireplace for ambiance and warmth', img: '/assets/materials/fireplace.jpg', popular: false, price: 6000 },
+      { id: 'fireplace', label: 'Outdoor Fireplace', desc: 'Built-in fireplace for ambiance and warmth', img: '/assets/materials/fire-pit.jpg', popular: false, price: 6000 },
       { id: 'bar', label: 'Bar Seating', desc: 'Island counter with social hub design', img: '/assets/materials/bar-seating.jpg', popular: false, price: 3000 },
     ],
   },
@@ -125,7 +125,7 @@ function OptionCard({ option, selected, onSelect }) {
     >
       <img src={option.img} alt={option.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
-      
+
       {option.popular && (
         <div className="absolute top-3 left-3 bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg z-10">
           Popular Choice
@@ -153,16 +153,16 @@ function SuccessScreen({ selections, contactInfo, onReset }) {
     const step = STEPS.find(s => s.id === stepId)
     if (!step) return acc
     if (Array.isArray(val)) {
-        return acc + val.reduce((sum, v) => {
-            const opt = step.options.find(o => o.id === v)
-            return sum + (opt?.price || 0)
-        }, 0)
+      return acc + val.reduce((sum, v) => {
+        const opt = step.options.find(o => o.id === v)
+        return sum + (opt?.price || 0)
+      }, 0)
     } else {
-        const opt = step.options.find(o => o.id === val)
-        return acc + (opt?.price || 0)
+      const opt = step.options.find(o => o.id === val)
+      return acc + (opt?.price || 0)
     }
   }, 0)
-  
+
   const low = Math.round(total * 0.9 / 1000) * 1000
   const high = Math.round(total * 1.2 / 1000) * 1000
 
@@ -174,10 +174,10 @@ function SuccessScreen({ selections, contactInfo, onReset }) {
       <h2 className="text-4xl font-black italic uppercase tracking-tighter mb-4 text-slate-900">Request Received!</h2>
       <p className="text-slate-500 mb-10">Hi {contactInfo.firstName}, we estimate your project value between:</p>
       <div className="bg-slate-950 rounded-[3rem] p-10 max-w-md mx-auto mb-10 text-white shadow-2xl">
-         <div className="text-4xl md:text-5xl font-black tabular-nums mb-2">
-            ${low.toLocaleString()} – ${high.toLocaleString()}
-         </div>
-         <p className="text-[10px] uppercase tracking-widest text-blue-400 font-bold">Estimated Investment</p>
+        <div className="text-4xl md:text-5xl font-black tabular-nums mb-2">
+          ${low.toLocaleString()} – ${high.toLocaleString()}
+        </div>
+        <p className="text-[10px] uppercase tracking-widest text-blue-400 font-bold">Estimated Investment</p>
       </div>
       <div className="flex flex-wrap justify-center gap-4">
         <a href="tel:+18327445283" className="px-10 py-5 bg-blue-600 text-white rounded-full font-bold uppercase tracking-widest text-xs flex items-center gap-2 hover:bg-blue-700 transition-colors">
@@ -194,7 +194,7 @@ function SuccessScreen({ selections, contactInfo, onReset }) {
 export default function QuoterForm({ isEmbedded = false }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [selections, setSelections] = useState({ contact_preference: 'call' })
-  
+
   // New State variables as requested
   const [contactName, setContactName] = useState('')
   const [contactPhone, setContactPhone] = useState('')
@@ -237,11 +237,11 @@ export default function QuoterForm({ isEmbedded = false }) {
   const handlePhoneChange = (e) => {
     const formatted = formatPhoneNumber(e.target.value);
     setContactPhone(formatted);
-    
+
     if (phoneError) setPhoneError('');
     if (phoneVerificationResult) setPhoneVerificationResult(null);
     if (phoneVerifyTimer) clearTimeout(phoneVerifyTimer);
-    
+
     const digits = formatted.replace(/\D/g, '');
     if (digits.length === 10) {
       const validation = isValidPhoneNumber(formatted);
@@ -292,13 +292,13 @@ export default function QuoterForm({ isEmbedded = false }) {
       toast({ title: "Invalid Phone Number", description: phoneValidation.error || "Please enter a valid 10-digit US phone number.", variant: "destructive" });
       return;
     }
-    
+
     setIsProcessing(true);
-    
+
     if (typeof window.fbq !== 'undefined') {
       window.fbq('track', 'CompleteRegistration');
     }
-    
+
     try {
       const response = await supabase.functions.invoke('submit-patio-lead', {
         body: {
@@ -318,7 +318,7 @@ export default function QuoterForm({ isEmbedded = false }) {
 
       if (response.error) throw new Error(response.error.message);
       const { data } = response;
-      
+
       if (data.success || Object.keys(data).length > 0) {
         trackAIGeneration({
           roofType: selections['roof'],
@@ -350,10 +350,10 @@ export default function QuoterForm({ isEmbedded = false }) {
 
   const handleSelect = (id) => {
     if (step.id === 'contact_preference') {
-       setSelections(prev => ({ ...prev, [step.id]: id }))
-       return;
+      setSelections(prev => ({ ...prev, [step.id]: id }))
+      return;
     }
-    
+
     if (step.multiple) {
       setSelections(prev => {
         const current = prev[step.id] || []
@@ -367,9 +367,9 @@ export default function QuoterForm({ isEmbedded = false }) {
       setSelections(prev => ({ ...prev, [step.id]: id }))
       // automatically advance if not multiple selection and not the last step
       if (currentStep < STEPS.length - 1) {
-          setTimeout(() => {
-              handleNext();
-          }, 400);
+        setTimeout(() => {
+          handleNext();
+        }, 400);
       }
     }
   }
@@ -386,13 +386,13 @@ export default function QuoterForm({ isEmbedded = false }) {
 
   return (
     <div className={cn("mx-auto", isEmbedded ? "max-w-5xl" : "max-w-6xl px-6")} data-patio-designer>
-      
+
       {/* ── HEADER & PROGRESS ────────────────────────────────────────────── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-4">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold flex items-center flex-wrap gap-2">
-            <span className="text-blue-600">Step {currentStep + 1} of {STEPS.length}</span> 
-            <span className="text-slate-300 mx-1 hidden md:block">•</span> 
+            <span className="text-blue-600">Step {currentStep + 1} of {STEPS.length}</span>
+            <span className="text-slate-300 mx-1 hidden md:block">•</span>
             <span className="text-orange-500">{step.title}</span>
           </h2>
           <p className="text-slate-500 mt-2 font-medium">{step.description}</p>
@@ -410,18 +410,18 @@ export default function QuoterForm({ isEmbedded = false }) {
 
       {/* ── STEP CONTENT ─────────────────────────────────────────────────── */}
       <div className="bg-white rounded-3xl p-6 md:p-10 border border-slate-100 shadow-sm min-h-[400px] flex flex-col justify-center">
-        
+
         <div className="text-center mb-10">
           <h3 className="text-3xl md:text-4xl font-bold text-[#7a6470] mb-2">{step.heading}</h3>
           <p className="text-slate-500 font-medium">{step.subtitle}</p>
-          
+
           {step.optional && (
             <div className="mt-4 flex flex-col items-center gap-4">
               <span className="bg-slate-100 text-slate-600 text-xs px-3 py-1 rounded-full font-medium">
                 Optional - Skip or select multiple
               </span>
-              <button 
-                onClick={handleNext} 
+              <button
+                onClick={handleNext}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-bold text-sm flex items-center transition-colors shadow-lg shadow-blue-500/30"
               >
                 Skip {step.title} Features <ChevronRight size={18} className="ml-1" />
@@ -432,7 +432,7 @@ export default function QuoterForm({ isEmbedded = false }) {
 
         {step.id === 'contact_preference' ? (
           <div className="max-w-xl mx-auto w-full space-y-4">
-            <div 
+            <div
               onClick={() => handleSelect('call')}
               className={cn(
                 "flex items-center gap-4 p-5 rounded-xl border-2 transition-all cursor-pointer",
@@ -443,7 +443,7 @@ export default function QuoterForm({ isEmbedded = false }) {
                 "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
                 selections.contact_preference === 'call' ? "border-blue-600" : "border-slate-300"
               )}>
-                 {selections.contact_preference === 'call' && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />}
+                {selections.contact_preference === 'call' && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />}
               </div>
               <div className="flex-1">
                 <h4 className="font-bold text-slate-900 leading-tight">Call me now</h4>
@@ -451,7 +451,7 @@ export default function QuoterForm({ isEmbedded = false }) {
               </div>
             </div>
 
-            <div 
+            <div
               onClick={() => handleSelect('text')}
               className={cn(
                 "flex items-center gap-4 p-5 rounded-xl border-2 transition-all cursor-pointer",
@@ -462,7 +462,7 @@ export default function QuoterForm({ isEmbedded = false }) {
                 "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
                 selections.contact_preference === 'text' ? "border-blue-600" : "border-slate-300"
               )}>
-                 {selections.contact_preference === 'text' && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />}
+                {selections.contact_preference === 'text' && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />}
               </div>
               <div className="flex-1">
                 <h4 className="font-bold text-slate-900 leading-tight">Text me first, I will reply with best time</h4>
@@ -474,7 +474,7 @@ export default function QuoterForm({ isEmbedded = false }) {
           <div className="max-w-2xl mx-auto w-full">
             <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 mb-4 shadow-sm">
               <h3 className="text-xl font-bold mb-6 text-slate-900">Your Design Summary</h3>
-              
+
               <div className="space-y-4 mb-8">
                 <div className="flex justify-between items-center text-sm">
                   <span className="font-medium text-slate-700">Roof Style:</span>
@@ -494,7 +494,7 @@ export default function QuoterForm({ isEmbedded = false }) {
                     {STEPS.find(s => s.id === 'columns')?.options.find(o => o.id === selections['columns'])?.label || 'Not selected'}
                   </span>
                 </div>
-                
+
                 {(selections['kitchen']?.length > 0) && (
                   <div className="flex justify-between items-start text-sm">
                     <span className="font-medium text-slate-700 mr-4">Kitchen Features:</span>
@@ -506,7 +506,7 @@ export default function QuoterForm({ isEmbedded = false }) {
                     </div>
                   </div>
                 )}
-                
+
                 {(selections['features']?.length > 0) && (
                   <div className="flex justify-between items-start text-sm">
                     <span className="font-medium text-slate-700 mr-4">Features:</span>
@@ -523,22 +523,22 @@ export default function QuoterForm({ isEmbedded = false }) {
               <div className="space-y-4 pt-6 border-t border-slate-100">
                 <div className="space-y-1">
                   <label className="text-sm font-bold text-slate-900">Your Name *</label>
-                  <input 
-                    type="text" placeholder="Enter your full name" 
+                  <input
+                    type="text" placeholder="Enter your full name"
                     value={contactName} onChange={e => setContactName(e.target.value)}
-                    className="w-full bg-white px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-slate-200" 
+                    className="w-full bg-white px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-slate-200"
                   />
                 </div>
-                
+
                 <div className="space-y-1">
                   <label className="text-sm font-bold text-slate-900">Phone Number *</label>
-                  <input 
-                    type="tel" placeholder="(123) 456-7890" 
+                  <input
+                    type="tel" placeholder="(123) 456-7890"
                     value={contactPhone} onChange={handlePhoneChange}
                     className={cn(
                       "w-full bg-white px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-slate-200",
                       phoneError ? 'border-red-500 focus:ring-red-500' : ''
-                    )} 
+                    )}
                   />
                   {phoneError && (
                     <p className="text-sm text-red-500 mt-1">{phoneError}</p>
@@ -566,12 +566,12 @@ export default function QuoterForm({ isEmbedded = false }) {
                 <p className="text-[10px] text-slate-500 mb-6 leading-relaxed px-4">
                   By opting in, I agree to receive account-related texts (appointments, orders, alerts) from Fix My Home LLC. Msg & data rates may apply. Reply STOP to cancel, HELP for info. View our <a href="#" className="text-blue-500 hover:underline">Privacy Policy</a>
                 </p>
-                <button 
+                <button
                   onClick={submitPatioLead}
                   disabled={
-                    isProcessing || 
-                    !contactName.trim() || 
-                    !contactPhone.trim() || 
+                    isProcessing ||
+                    !contactName.trim() ||
+                    !contactPhone.trim() ||
                     !isValidPhoneNumber(contactPhone).isValid ||
                     phoneVerifying ||
                     !phoneVerificationResult?.verified ||
@@ -581,8 +581,8 @@ export default function QuoterForm({ isEmbedded = false }) {
                 >
                   {isProcessing ? (
                     <div className="flex items-center gap-2">
-                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                       <span>Submitting Request...</span>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <span>Submitting Request...</span>
                     </div>
                   ) : (
                     <>
@@ -596,16 +596,16 @@ export default function QuoterForm({ isEmbedded = false }) {
         ) : (
           <div className="flex flex-wrap justify-center gap-6">
             {step.options.map(opt => {
-              const isSelected = step.multiple 
+              const isSelected = step.multiple
                 ? (selections[step.id] || []).includes(opt.id)
                 : selections[step.id] === opt.id
 
               return (
-                <OptionCard 
-                  key={opt.id} 
-                  option={opt} 
-                  selected={isSelected} 
-                  onSelect={handleSelect} 
+                <OptionCard
+                  key={opt.id}
+                  option={opt}
+                  selected={isSelected}
+                  onSelect={handleSelect}
                 />
               )
             })}
@@ -616,18 +616,18 @@ export default function QuoterForm({ isEmbedded = false }) {
       {/* ── FOOTER CONTROLS ──────────────────────────────────────────────── */}
       <div className="mt-8 flex justify-between items-center px-4">
         {(currentStep > 0 && step.id !== 'submit') ? (
-          <button 
-            onClick={handleBack} 
+          <button
+            onClick={handleBack}
             className="flex items-center gap-2 px-6 py-3 text-slate-500 font-bold uppercase tracking-wider text-xs rounded-full hover:bg-slate-100 transition-colors"
           >
             <ChevronLeft size={16} /> Back
           </button>
         ) : (
-           <div />
+          <div />
         )}
-        
+
         {step.id !== 'submit' && (
-          <button 
+          <button
             onClick={handleNext}
             disabled={!canProceed()}
             className="px-8 py-3 bg-blue-600 text-white rounded-full font-bold uppercase tracking-wider text-xs shadow-xl hover:bg-blue-700 transition-all flex items-center gap-2 disabled:bg-slate-300 disabled:shadow-none"
@@ -640,8 +640,8 @@ export default function QuoterForm({ isEmbedded = false }) {
       {/* Indicator Dots */}
       <div className="flex justify-center mt-6 gap-2">
         {STEPS.map((_, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             className={cn(
               "h-2 rounded-full transition-all duration-300",
               i === currentStep ? "w-8 bg-blue-600" : "w-2 bg-slate-200"

@@ -302,7 +302,7 @@ export default function Home() {
               <motion.div
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="  bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-[480px] hidden lg:block z-20"
+                className="  bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-[480px]  lg:block z-20"
               >
                 <div className="flex gap-1 text-yellow-400 mb-4">
                   {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
@@ -439,8 +439,7 @@ export default function Home() {
             <div className="flex gap-12">
               {[
                 { name: 'Instagram', url: 'https://www.instagram.com/fixmyhomellc/' },
-                { name: 'Facebook', url: '#' },
-                { name: 'LinkedIn', url: '#' }
+
               ].map(s => (
                 <a key={s.name} href={s.url} target={s.url !== '#' ? "_blank" : undefined} rel={s.url !== '#' ? "noopener noreferrer" : undefined} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors uppercase">{s.name}</a>
               ))}
