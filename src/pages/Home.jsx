@@ -332,7 +332,7 @@ export default function Home() {
             </div>
             <Link
               to="/portfolio"
-              className="px-10 py-5 bg-white border border-white/10 text-white rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-white/10 transition-all flex items-center gap-3 mb-16"
+              className="px-10 py-5 bg-white border border-white/10 text-dark rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-black/50 hover:text-white transition-all flex items-center gap-3 mb-16"
             >
               Explore Full Gallery <ArrowRight size={14} />
             </Link>
@@ -420,6 +420,7 @@ export default function Home() {
           </div>
           <div className="bg-white p-6 md:p-12 rounded-[3.5rem] shadow-2xl shadow-slate-200 border border-slate-100">
             <QuoterForm isEmbedded />
+
           </div>
         </div>
       </section>

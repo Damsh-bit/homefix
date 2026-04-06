@@ -221,18 +221,7 @@ export default function QuoterForm({ isEmbedded = false }) {
     };
   }, [phoneVerifyTimer]);
 
-  // Auto-scroll to top on mobile when step changes
-  useEffect(() => {
-    if (isMobile) {
-      const container = document.querySelector('[data-patio-designer]');
-      if (container) {
-        container.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    }
-  }, [currentStep, isMobile]);
+
 
   const handlePhoneChange = (e) => {
     const formatted = formatPhoneNumber(e.target.value);
