@@ -99,8 +99,8 @@ function SectionTitle({ subtitle, title, description, light = false }) {
 
 // ─── Main Page ─────────────────────────────────────────────────────────────
 
-const HERO_IMAGE_DESKTOP = '/assets/Team.webp'
-const HERO_IMAGE_MOBILE = '/assets/Team_mobile.webp'
+const HERO_IMAGE_DESKTOP = '/assets/Team.png'
+const HERO_IMAGE_MOBILE = '/assets/team_mobile.png'
 
 const TEAM_MEMBERS = [
   { name: 'Miguel Isaguirre', role: 'Founder & CEO', img: '/assets/miguel-isaguirre.webp' },
