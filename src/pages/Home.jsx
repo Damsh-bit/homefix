@@ -291,18 +291,19 @@ export default function Home() {
             </div>
 
             <div className="flex-1">
-              <div className="relative rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.2)] aspect-[4/5] bg-slate-100">
+              <div className="relative rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.2)] aspect-[4/5] bg-slate-100 touch-pan-y">
                 <BeforeAfterSlider
                   beforeImg="/assets/patio-before-sample.jpg"
                   afterImg="/assets/patio-after-sample.jpg"
                   aspect="aspect-[4/5]"
+
                 />
               </div>
 
               <motion.div
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="  bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-[480px]  lg:block z-20"
+                className="  bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-[480px] lg:block z-20"
               >
                 <div className="flex gap-1 text-yellow-400 mb-4">
                   {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
