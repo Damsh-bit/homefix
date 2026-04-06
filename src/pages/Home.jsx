@@ -440,8 +440,7 @@ export default function Home() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.4, delay: offset * 0.05 }}
-                    className="flex-shrink-0 w-[180px] h-[250px] rounded-xl overflow-hidden cursor-pointer group"
-                    onClick={() => setTeamSlide(memberIndex)}
+                    className="flex-shrink-0 w-[180px] h-[250px] rounded-xl overflow-hidden group"
                   >
                     <div className="relative w-full h-full shadow-lg group-hover:shadow-2xl transition-shadow duration-300">
                       <img
@@ -462,7 +461,7 @@ export default function Home() {
             {/* Left Navigation Button */}
             <button
               onClick={prevTeamSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all shadow-lg hover:shadow-xl"
+              className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all shadow-lg hover:shadow-xl"
             >
               <ChevronLeft size={20} />
             </button>
@@ -470,7 +469,7 @@ export default function Home() {
             {/* Right Navigation Button */}
             <button
               onClick={nextTeamSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all shadow-lg hover:shadow-xl"
+              className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all shadow-lg hover:shadow-xl"
             >
               <ChevronRight size={20} />
             </button>
@@ -479,9 +478,8 @@ export default function Home() {
           {/* Slide Indicators */}
           <div className="flex gap-2 justify-center mt-4">
             {TEAM_MEMBERS.map((_, i) => (
-              <button
+              <div
                 key={i}
-                onClick={() => setTeamSlide(i)}
                 className={`w-2 h-2 rounded-full transition-all ${i === teamSlide ? 'bg-blue-600 scale-150' : 'bg-slate-300'}`}
               />
             ))}
