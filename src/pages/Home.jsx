@@ -100,11 +100,11 @@ function SectionTitle({ subtitle, title, description, light = false }) {
 // ─── Main Page ─────────────────────────────────────────────────────────────
 
 const HERO_IMAGES = [
-  '/assets/materials/gable-roof.jpg',
-  '/assets/materials/hip-roof.jpg',
-  '/assets/materials/pavers.jpg',
-  '/assets/materials/pool.jpg',
-  '/assets/materials/outdoor-sink.jpg'
+  '/assets/Home1.jpg',
+  '/assets/Home2.jpg',
+  '/assets/Home3.jpg',
+  '/assets/Home4.jpg',
+  '/assets/Home5.jpg'
 ]
 
 const CONTACT_IMAGES = [
@@ -112,6 +112,13 @@ const CONTACT_IMAGES = [
   { src: '/assets/Contact/2.jpg', alt: 'Outdoor living area with custom lighting', label: 'Custom Outdoor Living' },
   { src: '/assets/Contact/3.jpg', alt: 'High-end patio installation at night', label: 'Premium Lighting & Design' },
   { src: '/assets/Contact/4.jpg', alt: 'Modern backyard renovation in Houston', label: 'Modern Backyard Renovation' }
+]
+
+const HERO_STATS = [
+  { label: 'Quality', val: 'A+', icon: <Award className="text-blue-500" /> },
+  { label: 'Licensed', val: 'TX Cert', icon: <ShieldCheck className="text-blue-500" /> },
+  { label: 'Reviews', val: '4.8 ⭐', icon: <Star className="text-blue-500" /> },
+  { label: 'Warranty', val: '5 Yrs', icon: <Key className="text-blue-500" /> }
 ]
 
 const DEFAULT_CONTACT_FORM = {
@@ -304,11 +311,30 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4, duration: 0.8 }}
-                className="text-base sm:text-lg md:text-2xl text-slate-300 font-light max-w-xl mb-10 md:mb-12 leading-relaxed"
+                className="text-xs sm:text-sm md:text-base text-slate-300 font-light max-w-xl mb-4 leading-relaxed"
               >
-                <span className="block text-lg sm:text-xl md:text-3xl font-semibold text-white mb-4 md:mb-6">Premium patios, pergolas & concrete overlays</span>
+                <span className="block text-sm sm:text-base md:text-lg font-semibold text-white mb-2">Premium patios, pergolas & concrete overlays</span>
                 We design and build luxury outdoor living spaces that become the heart of your home. Custom-built to match your house, your style, and your budget — serving Houston, Cypress, Katy, and surrounding areas.
               </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="flex flex-wrap items-center gap-2 max-w-full mb-6"
+              >
+                {HERO_STATS.map((box, i) => (
+                  <div key={i} className="flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-[11px] sm:text-xs transition-all hover:bg-white/15">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-2xl bg-blue-500/10">
+                      {box.icon}
+                    </div>
+                    <div className="leading-tight">
+                      <div className="font-black text-white">{box.val}</div>
+                      <div className="text-[8px] font-black uppercase tracking-[0.2em] text-blue-400">{box.label}</div>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -330,33 +356,6 @@ export default function Home() {
                 >
                   See Our Work
                 </a>
-              </motion.div>
-            </div>
-
-            {/* Right Information Column (Grid Style) */}
-            <div className="lg:col-span-4 hidden lg:block">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-                className="grid grid-cols-2 gap-4"
-              >
-                {[
-                  { label: 'Quality', val: 'A+', icon: <Award className="text-blue-500" /> },
-                  { label: 'Licensed', val: 'TX Cert', icon: <ShieldCheck className="text-blue-500" /> },
-                  { label: 'Reviews', val: '4.8 ⭐', icon: <Star className="text-blue-500" /> },
-                  { label: 'Warranty', val: '5 Yrs', icon: <Key className="text-blue-500" /> }
-                ].map((box, i) => (
-                  <div key={i} className="aspect-square bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl p-6 flex flex-col justify-between hover:bg-white/10 transition-colors">
-                    <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center">
-                      {box.icon}
-                    </div>
-                    <div>
-                      <div className="text-lg font-black text-white leading-none mb-1">{box.val}</div>
-                      <div className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-400">{box.label}</div>
-                    </div>
-                  </div>
-                ))}
               </motion.div>
             </div>
           </div>
