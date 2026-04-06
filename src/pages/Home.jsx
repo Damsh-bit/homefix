@@ -99,12 +99,16 @@ function SectionTitle({ subtitle, title, description, light = false }) {
 
 // ─── Main Page ─────────────────────────────────────────────────────────────
 
-const HERO_IMAGES = [
-  '/assets/Home1.jpg',
-  '/assets/Home2.jpg',
-  '/assets/Home3.jpg',
-  '/assets/Home4.jpg',
-  '/assets/Home5.jpg'
+const HERO_IMAGE_DESKTOP = '/assets/Team.PNG'
+const HERO_IMAGE_MOBILE = '/assets/Team_mobile.PNG'
+
+const TEAM_MEMBERS = [
+  { name: 'Miguel Isaguirre', role: 'Founder & CEO', img: '/assets/miguel-isaguirre.webp' },
+  { name: 'Lirisse N. Salazar', role: 'Chief Operating Officer', img: '/assets/lirisse-salazar.webp' },
+  { name: 'Arnoldo Guerra', role: 'Project Director', img: '/assets/arnoldo-guerra.webp' },
+  { name: 'Manuel Salazar', role: 'Lead Builder', img: '/assets/manuel-salazar.webp' },
+  { name: 'Carlos Martinez', role: 'Project Supervisor', img: '/assets/carlos-martinez-isaguirre.webp' },
+  { name: 'Nemesi Isaguirre', role: 'Marketing Director', img: '/assets/nemesi-isaguirre.webp' }
 ]
 
 const CONTACT_IMAGES = [
@@ -130,7 +134,7 @@ const DEFAULT_CONTACT_FORM = {
 }
 
 export default function Home() {
-  const [imageIndex, setImageIndex] = useState(0)
+  const [teamSlide, setTeamSlide] = useState(0)
   const [contactSlide, setContactSlide] = useState(0)
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -152,13 +156,6 @@ export default function Home() {
     url: 'https://fixmyhomellc.com/',
     image: '/assets/materials/gable-roof.jpg'
   })
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setImageIndex(prev => (prev + 1) % HERO_IMAGES.length)
-    }, 6000)
-    return () => clearInterval(timer)
-  }, [])
 
   useEffect(() => {
     const savedForm = localStorage.getItem('home_contact_form_draft')
@@ -192,6 +189,13 @@ export default function Home() {
       setContactSlide((prev) => (prev + 1) % CONTACT_IMAGES.length)
     }, 5000)
     return () => clearInterval(sliderTimer)
+  }, [])
+
+  useEffect(() => {
+    const teamTimer = setInterval(() => {
+      setTeamSlide((prev) => (prev + 1) % TEAM_MEMBERS.length)
+    }, 4000)
+    return () => clearInterval(teamTimer)
   }, [])
 
   const handleContactFieldChange = (field) => (event) => {
@@ -252,6 +256,9 @@ export default function Home() {
   const nextContactSlide = () => setContactSlide((prev) => (prev + 1) % CONTACT_IMAGES.length)
   const prevContactSlide = () => setContactSlide((prev) => (prev - 1 + CONTACT_IMAGES.length) % CONTACT_IMAGES.length)
 
+  const nextTeamSlide = () => setTeamSlide((prev) => (prev + 1) % TEAM_MEMBERS.length)
+  const prevTeamSlide = () => setTeamSlide((prev) => (prev - 1 + TEAM_MEMBERS.length) % TEAM_MEMBERS.length)
+
   return (
     <div className="bg-white">
       {/* ── HERO SECTION ────────────────────────────────────────────────── */}
@@ -260,22 +267,23 @@ export default function Home() {
         <div className="absolute inset-0 z-0 bg-slate-950">
           <AnimatePresence mode="wait">
             <motion.div
-              key={imageIndex}
               initial={{ opacity: 0, scale: 1.1 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 2, ease: "easeInOut" }}
               className="absolute inset-0"
             >
-              <img
-                src={HERO_IMAGES[imageIndex]}
-                alt="Background"
-                className="w-full h-full object-cover"
-              />
+              <picture>
+                <source srcSet={HERO_IMAGE_MOBILE} media="(max-width: 767px)" />
+                <img
+                  src={HERO_IMAGE_DESKTOP}
+                  alt="Team"
+                  className="w-full h-full object-cover object-bottom"
+                />
+              </picture>
             </motion.div>
           </AnimatePresence>
           {/* Subtle gradients to ensure text visibility while keeping images bright */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/95 via-slate-950/60 to-transparent md:bg-gradient-to-t md:from-slate-950/90 md:via-slate-950/10 md:to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/20 to-transparent" />
         </div>
 
@@ -386,8 +394,119 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── MEET THE TEAM ────────────────────────────────────────────────── */}
+      <section className="py-12 md:py-20 bg-white">
+        {/* Header - Centered */}
+        <div className="container mx-auto px-6 max-w-4xl mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-px w-8 bg-blue-600" />
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600">
+                Leadership
+              </span>
+              <div className="h-px w-8 bg-blue-600" />
+            </div>
+            <h2 className="text-4xl md:text-6xl font-black mb-6 uppercase italic tracking-tighter text-slate-900">
+              Meet The Team
+            </h2>
+            <p className="text-lg font-light leading-relaxed text-slate-500">
+              The visionaries, builders, and strategists behind every project. Our talented leadership team drives FixMyHome's excellence and innovation.
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Fullwidth Carousel */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="mb-4"
+        >
+          <div className="relative w-full">
+            <div className="flex gap-4 px-12 md:px-20 justify-center items-center py-4 overflow-x-auto">
+              {[0, 1, 2, 3, 4].map((offset) => {
+                const memberIndex = (teamSlide + offset) % TEAM_MEMBERS.length
+                const member = TEAM_MEMBERS[memberIndex]
+                
+                return (
+                  <motion.div
+                    key={`${memberIndex}`}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, delay: offset * 0.05 }}
+                    className="flex-shrink-0 w-[180px] h-[250px] rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => setTeamSlide(memberIndex)}
+                  >
+                    <div className="relative w-full h-full shadow-lg group-hover:shadow-2xl transition-shadow duration-300">
+                      <img
+                        src={member.img}
+                        alt={member.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent p-4 flex flex-col justify-end">
+                        <h4 className="text-sm font-bold text-white leading-tight">{member.name}</h4>
+                        <p className="text-xs text-blue-300 font-semibold">{member.role}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
+
+            {/* Left Navigation Button */}
+            <button
+              onClick={prevTeamSlide}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all shadow-lg hover:shadow-xl"
+            >
+              <ChevronLeft size={20} />
+            </button>
+
+            {/* Right Navigation Button */}
+            <button
+              onClick={nextTeamSlide}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all shadow-lg hover:shadow-xl"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+
+          {/* Slide Indicators */}
+          <div className="flex gap-2 justify-center mt-4">
+            {TEAM_MEMBERS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setTeamSlide(i)}
+                className={`w-2 h-2 rounded-full transition-all ${i === teamSlide ? 'bg-blue-600 scale-150' : 'bg-slate-300'}`}
+              />
+            ))}
+          </div>
+        </motion.div>
+
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="text-center"
+        >
+          <Link
+            to="/team"
+            className="inline-flex px-10 py-4 bg-blue-600 text-white rounded-full font-black uppercase tracking-widest text-[11px] hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl items-center gap-3"
+          >
+            Meet The Full Team <ArrowRight size={16} />
+          </Link>
+        </motion.div>
+      </section>
+
       {/* ── AI VISUALIZER SECTION ────────────────────────────────────────── */}
-      <section className="py-24 md:py-40 bg-white overflow-hidden">
+      <section className="py-12 md:py-20 bg-white overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center gap-20">
             <div className="flex-1">
