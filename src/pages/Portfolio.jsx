@@ -6,6 +6,7 @@ import {
   MapPin, Calendar, Layers, Star 
 } from 'lucide-react'
 import BeforeAfterSlider from '../components/portfolio/BeforeAfterSlider'
+import { usePageMetadata } from '../hooks/usePageMetadata.jsx'
 
 const CATEGORIES = ['All', 'Patio Covers', 'Renovations', 'Custom Pools', 'Outdoor Kitchens']
 
@@ -24,7 +25,7 @@ const PROJECTS = [
     title: 'Luxury Resort Pool & Deck',
     category: 'Custom Pools',
     location: 'The Woodlands, TX',
-    image: '/assets/materials/pool.jpg',
+    image: '/assets/materials/pool2.jpg',
     year: '2024',
     feat: 'Travertine Flooring'
   },
@@ -60,7 +61,7 @@ const PROJECTS = [
     title: 'Minimalist Stamped Poolside',
     category: 'Custom Pools',
     location: 'Pearland, TX',
-    image: '/assets/materials/pool.jpg', // Placeholder image from public/assets
+    image: '/assets/materials/pool.jpg', 
     year: '2023',
     feat: 'Anti-Slip Finish'
   }
@@ -71,26 +72,35 @@ export default function Portfolio() {
 
   const filteredProjects = PROJECTS.filter(p => filter === 'All' || p.category === filter)
 
+  usePageMetadata({
+    title: 'Portfolio | FixMyHome LLC — Houston Outdoor Living Projects',
+    description: 'Explore premium patio covers, outdoor kitchens, and custom pool transformations completed by FixMyHome LLC across Houston and surrounding areas.',
+    url: 'https://fixmyhomellc.com/portfolio',
+    image: '/assets/materials/pool.jpg'
+  })
+
   return (
     <div className="bg-white min-h-screen pt-32 pb-20">
       {/* ── HERO SECTION ────────────────────────────────────────────────── */}
-      <section className="mb-24 px-6">
+      <section className="mb-24 px-6 sm:px-8 lg:px-10">
         <div className="container mx-auto">
           <div className="max-w-4xl">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-4 mb-6"
+              className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6"
             >
               <div className="h-px w-10 bg-blue-600" />
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600">Our Architecture</span>
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em] text-blue-600">
+                Our Architecture
+              </span>
             </motion.div>
             
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-6xl md:text-8xl font-black text-slate-950 mb-8 uppercase italic tracking-tighter leading-none"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-950 mb-8 uppercase italic tracking-tighter leading-tight"
             >
               Masterpieces <br /><span className="text-blue-600">In Houston</span>
             </motion.h1>
@@ -99,7 +109,7 @@ export default function Portfolio() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-xl text-slate-500 font-light max-w-xl leading-relaxed italic"
+              className="text-base sm:text-lg md:text-xl text-slate-500 font-light max-w-2xl leading-relaxed italic"
             >
               A curated collection of visionary transformations. Every line, stone, and beam reflects our commitment to architectural excellence.
             </motion.p>

@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   Check, ChevronRight, ChevronLeft, Phone
 } from 'lucide-react'
 
 import { supabase } from '../../integrations/supabase/client.js';
+
+void motion
 import { trackAIGeneration, getSessionId } from '../../utils/analytics.js';
 import { useToast } from '../../hooks/use-toast.js';
-import { useIsMobile } from '../../hooks/use-mobile.js';
 
 /* 
 declare global {
@@ -87,9 +88,9 @@ const STEPS = [
     multiple: true,
     optional: true,
     options: [
-      { id: 'firepit', label: 'Fire Pit', desc: 'Round 3.5ft fire pit for gatherings and warmth', img: '/assets/materials/firepit.jpg', popular: true, price: 2500 },
-      { id: 'fan', label: 'Ceiling Fan', desc: 'Outdoor rated fan for comfort and air circulation', img: '/assets/materials/fan.jpg', popular: true, price: 500 },
-      { id: 'led', label: 'LED Lighting', desc: 'Premium outdoor LED lighting system', img: '/assets/materials/led.jpg', popular: false, price: 1500 },
+      { id: 'firepit', label: 'Fire Pit', desc: 'Round 3.5ft fire pit for gatherings and warmth', img: '/assets/materials/fire-pit.jpg', popular: true, price: 2500 },
+      { id: 'fan', label: 'Ceiling Fan', desc: 'Outdoor rated fan for comfort and air circulation', img: '/assets/materials/ceiling-fan.jpg', popular: true, price: 500 },
+      { id: 'led', label: 'LED Lighting', desc: 'Premium outdoor LED lighting system', img: '/assets/materials/led-lighting.jpg', popular: false, price: 1500 },
     ],
   },
   {
@@ -118,7 +119,7 @@ function OptionCard({ option, selected, onSelect }) {
       whileHover={{ y: -4 }}
       whileTap={{ scale: 0.98 }}
       className={cn(
-        "group relative rounded-2xl flex-1 min-w-[280px] max-w-[340px] h-[240px] overflow-hidden cursor-pointer transition-all border-[3px]",
+        "group relative rounded-2xl flex-1 min-w-[220px] max-w-full sm:max-w-[340px] h-[240px] overflow-hidden cursor-pointer transition-all border-[3px]",
         selected ? "border-blue-600 shadow-xl" : "border-transparent bg-white shadow-md hover:shadow-xl"
       )}
       onClick={() => onSelect(option.id)}
@@ -146,6 +147,26 @@ function OptionCard({ option, selected, onSelect }) {
       </div>
     </motion.div>
   )
+}
+
+function formatPhoneNumber(value) {
+  const digits = value.replace(/\D/g, '').slice(0, 10)
+  const part1 = digits.slice(0, 3)
+  const part2 = digits.slice(3, 6)
+  const part3 = digits.slice(6, 10)
+
+  if (part3) return `(${part1}) ${part2}-${part3}`
+  if (part2) return `(${part1}) ${part2}`
+  if (part1) return `(${part1}`
+  return ''
+}
+
+function isValidPhoneNumber(value) {
+  const digits = value.replace(/\D/g, '')
+  if (digits.length === 10) {
+    return { isValid: true }
+  }
+  return { isValid: false, error: 'Enter a 10-digit US phone number.' }
 }
 
 function SuccessScreen({ selections, contactInfo, onReset }) {
@@ -198,16 +219,18 @@ export default function QuoterForm({ isEmbedded = false }) {
   // New State variables as requested
   const [contactName, setContactName] = useState('')
   const [contactPhone, setContactPhone] = useState('')
-  const [contactPreference, setContactPreference] = useState('call')
+  const [contactPreference] = useState('call')
   const [phoneError, setPhoneError] = useState('')
   const [phoneVerifying, setPhoneVerifying] = useState(false)
   const [phoneVerificationResult, setPhoneVerificationResult] = useState(null)
+  const [phoneVerificationMessage, setPhoneVerificationMessage] = useState('')
   const [phoneVerifyTimer, setPhoneVerifyTimer] = useState(null)
   const [submitted, setSubmitted] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState('')
+  const [submitMessageType, setSubmitMessageType] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
 
   const { toast } = useToast()
-  const isMobile = useIsMobile()
 
   const step = STEPS[currentStep]
   const progress = Math.round((currentStep / (STEPS.length - 1)) * 100)
@@ -225,22 +248,26 @@ export default function QuoterForm({ isEmbedded = false }) {
 
   const handlePhoneChange = (e) => {
     const formatted = formatPhoneNumber(e.target.value);
+    console.log('phone input:', formatted);
     setContactPhone(formatted);
 
     if (phoneError) setPhoneError('');
     if (phoneVerificationResult) setPhoneVerificationResult(null);
+    if (phoneVerificationMessage) setPhoneVerificationMessage('');
     if (phoneVerifyTimer) clearTimeout(phoneVerifyTimer);
 
     const digits = formatted.replace(/\D/g, '');
     if (digits.length === 10) {
       const validation = isValidPhoneNumber(formatted);
       if (validation.isValid) {
+        setPhoneVerificationMessage('Verifying phone number...');
         const timer = setTimeout(() => {
           verifyPhoneNumber(formatted);
         }, 800);
         setPhoneVerifyTimer(timer);
       } else {
         setPhoneError(validation.error || '');
+        setPhoneVerificationMessage('Por favor ingresa un número válido de 10 dígitos.');
       }
     }
   };
@@ -257,13 +284,17 @@ export default function QuoterForm({ isEmbedded = false }) {
       console.log('Phone verification result:', data);
       setPhoneVerificationResult(data);
       if (data.verified && data.data?.valid) {
-        toast({ title: "Phone Verified ✓", description: `${data.data.carrier} • ${data.data.line_type}` });
+        const successMessage = `Phone verified • ${data.data.carrier} • ${data.data.line_type}`;
+        setPhoneVerificationMessage(successMessage);
+        toast({ title: "Phone Verified ✓", description: successMessage });
       } else if (data.data && !data.data.valid) {
+        setPhoneVerificationMessage('Unable to verify this phone number. Please check and try again.');
         toast({ title: "Phone Verification Issue", description: "Please check your phone number and try again.", variant: "destructive" });
       }
     } catch (error) {
       console.error('Phone verification error:', error);
       setPhoneVerificationResult({ verified: false, error: 'Verification unavailable', data: null });
+      setPhoneVerificationMessage('Verification failed. Please check your connection and try again.');
     } finally {
       setPhoneVerifying(false);
     }
@@ -275,40 +306,46 @@ export default function QuoterForm({ isEmbedded = false }) {
       return;
     }
 
-    const phoneValidation = isValidPhoneNumber(contactPhone);
-    if (!phoneValidation.isValid) {
-      setPhoneError(phoneValidation.error || 'Invalid phone number');
-      toast({ title: "Invalid Phone Number", description: phoneValidation.error || "Please enter a valid 10-digit US phone number.", variant: "destructive" });
-      return;
-    }
+setSubmitMessage('');
+      setSubmitMessageType('');
 
-    setIsProcessing(true);
+      const phoneValidation = isValidPhoneNumber(contactPhone);
+      if (!phoneValidation.isValid) {
+        setPhoneError(phoneValidation.error || 'Invalid phone number');
+        setPhoneVerificationMessage('Please enter a valid 10-digit US phone number.');
+        toast({ title: "Invalid Phone Number", description: phoneValidation.error || "Please enter a valid 10-digit US phone number.", variant: "destructive" });
+        return;
+      }
+
+      setIsProcessing(true);
 
     if (typeof window.fbq !== 'undefined') {
       window.fbq('track', 'CompleteRegistration');
     }
 
     try {
+      const payload = {
+        roofType: selections['roof'] || '',
+        flooring: selections['flooring'] || '',
+        columns: selections['columns'] || '',
+        kitchenFeatures: selections['kitchen'] || [],
+        extraFeatures: selections['features'] || [],
+        area: 300,
+        sessionId: getSessionId(),
+        contact_name: contactName,
+        contact_phone: contactPhone,
+        contact_preference: selections['contact_preference'] || contactPreference,
+        phone_verification: phoneVerificationResult
+      }
+      console.log('submitPatioLead payload:', payload)
       const response = await supabase.functions.invoke('submit-patio-lead', {
-        body: {
-          roofType: selections['roof'] || '',
-          flooring: selections['flooring'] || '',
-          columns: selections['columns'] || '',
-          kitchenFeatures: selections['kitchen'] || [],
-          extraFeatures: selections['features'] || [],
-          area: 300,
-          sessionId: getSessionId(),
-          contact_name: contactName,
-          contact_phone: contactPhone,
-          contact_preference: selections['contact_preference'] || contactPreference,
-          phone_verification: phoneVerificationResult
-        }
+        body: payload
       });
 
       if (response.error) throw new Error(response.error.message);
       const { data } = response;
 
-      if (data.success || Object.keys(data).length > 0) {
+      if (data.success) {
         trackAIGeneration({
           roofType: selections['roof'],
           flooring: selections['flooring'],
@@ -317,12 +354,16 @@ export default function QuoterForm({ isEmbedded = false }) {
           extraFeatures: selections['features']
         });
         setSubmitted(true);
+        setSubmitMessage('Formulario enviado correctamente. Nos contactaremos pronto.');
+        setSubmitMessageType('success');
         toast({ title: "Request Received! 🎉", description: "We'll contact you soon with your custom design and quote." });
       } else {
         throw new Error(data.error || 'Failed to submit request');
       }
     } catch (error) {
       console.error('Error submitting patio lead:', error);
+      setSubmitMessage('No se pudo enviar el formulario. Por favor revisa tu conexión e intenta nuevamente.');
+      setSubmitMessageType('error');
       toast({ title: "Submission Failed", description: "Failed to submit your request. Please try again.", variant: "destructive" });
     } finally {
       setIsProcessing(false);
@@ -374,10 +415,10 @@ export default function QuoterForm({ isEmbedded = false }) {
   if (submitted) return <SuccessScreen selections={selections} contactInfo={{ firstName: contactName, phone: contactPhone }} onReset={() => setSubmitted(false)} />;
 
   return (
-    <div className={cn("mx-auto", isEmbedded ? "max-w-5xl" : "max-w-6xl px-6")} data-patio-designer>
+    <div className={cn("mx-auto w-full px-4 sm:px-6 py-6", isEmbedded ? "max-w-5xl" : "max-w-6xl")} data-patio-designer>
 
       {/* ── HEADER & PROGRESS ────────────────────────────────────────────── */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-4">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold flex items-center flex-wrap gap-2">
             <span className="text-blue-600">Step {currentStep + 1} of {STEPS.length}</span>
@@ -398,9 +439,9 @@ export default function QuoterForm({ isEmbedded = false }) {
       </div>
 
       {/* ── STEP CONTENT ─────────────────────────────────────────────────── */}
-      <div className="bg-white rounded-3xl p-6 md:p-10 border border-slate-100 shadow-sm min-h-[400px] flex flex-col justify-center">
+      <div className="bg-white rounded-3xl p-8 md:p-12 border border-slate-100 shadow-sm min-h-[400px] flex flex-col justify-center">
 
-        <div className="text-center mb-10">
+        <div className="text-center mb-12">
           <h3 className="text-3xl md:text-4xl font-bold text-[#7a6470] mb-2">{step.heading}</h3>
           <p className="text-slate-500 font-medium">{step.subtitle}</p>
 
@@ -424,7 +465,7 @@ export default function QuoterForm({ isEmbedded = false }) {
             <div
               onClick={() => handleSelect('call')}
               className={cn(
-                "flex items-center gap-4 p-5 rounded-xl border-2 transition-all cursor-pointer",
+                "flex flex-col sm:flex-row items-start sm:items-center gap-4 p-6 rounded-2xl border-2 transition-all cursor-pointer",
                 selections.contact_preference === 'call' ? "border-blue-600 bg-blue-50/50" : "border-slate-200 hover:border-blue-300 bg-white"
               )}
             >
@@ -443,7 +484,7 @@ export default function QuoterForm({ isEmbedded = false }) {
             <div
               onClick={() => handleSelect('text')}
               className={cn(
-                "flex items-center gap-4 p-5 rounded-xl border-2 transition-all cursor-pointer",
+                "flex flex-col sm:flex-row items-start sm:items-center gap-4 p-6 rounded-2xl border-2 transition-all cursor-pointer",
                 selections.contact_preference === 'text' ? "border-blue-600 bg-blue-50/50" : "border-slate-200 hover:border-blue-300 bg-white"
               )}
             >
@@ -461,7 +502,7 @@ export default function QuoterForm({ isEmbedded = false }) {
           </div>
         ) : step.id === 'submit' ? (
           <div className="max-w-2xl mx-auto w-full">
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 mb-4 shadow-sm">
+            <div className="bg-white border border-slate-200 rounded-2xl p-7 md:p-10 mb-5 shadow-sm">
               <h3 className="text-xl font-bold mb-6 text-slate-900">Your Design Summary</h3>
 
               <div className="space-y-4 mb-8">
@@ -510,31 +551,31 @@ export default function QuoterForm({ isEmbedded = false }) {
               </div>
 
               <div className="space-y-4 pt-6 border-t border-slate-100">
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <label className="text-sm font-bold text-slate-900">Your Name *</label>
                   <input
                     type="text" placeholder="Enter your full name"
                     value={contactName} onChange={e => setContactName(e.target.value)}
-                    className="w-full bg-white px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-slate-200"
+                    className="w-full bg-white px-5 py-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-slate-200"
                   />
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <label className="text-sm font-bold text-slate-900">Phone Number *</label>
                   <input
                     type="tel" placeholder="(123) 456-7890"
                     value={contactPhone} onChange={handlePhoneChange}
                     className={cn(
-                      "w-full bg-white px-4 py-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-slate-200",
+                      "w-full bg-white px-5 py-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-slate-200",
                       phoneError ? 'border-red-500 focus:ring-red-500' : ''
                     )}
                   />
                   {phoneError && (
                     <p className="text-sm text-red-500 mt-1">{phoneError}</p>
                   )}
-                  {phoneVerifying && (
-                    <p className="text-sm text-slate-500 flex items-center gap-2 mt-1">
-                      Verifying phone number...
+                  {phoneVerificationMessage && !phoneError && (
+                    <p className={`text-sm mt-1 ${phoneVerificationMessage.startsWith('Phone verified') ? 'text-green-600' : phoneVerifying ? 'text-slate-500' : 'text-amber-600'}`}>
+                      {phoneVerificationMessage}
                     </p>
                   )}
                   {phoneVerificationResult?.verified && phoneVerificationResult?.data?.valid && (
@@ -555,6 +596,11 @@ export default function QuoterForm({ isEmbedded = false }) {
                 <p className="text-[10px] text-slate-500 mb-6 leading-relaxed px-4">
                   By opting in, I agree to receive account-related texts (appointments, orders, alerts) from Fix My Home LLC. Msg & data rates may apply. Reply STOP to cancel, HELP for info. View our <a href="#" className="text-blue-500 hover:underline">Privacy Policy</a>
                 </p>
+                {submitMessage && (
+                  <div className={`mb-4 rounded-2xl px-4 py-3 text-sm ${submitMessageType === 'success' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'}`}>
+                    {submitMessage}
+                  </div>
+                )}
                 <button
                   onClick={submitPatioLead}
                   disabled={
@@ -566,7 +612,7 @@ export default function QuoterForm({ isEmbedded = false }) {
                     !phoneVerificationResult?.verified ||
                     !phoneVerificationResult?.data?.valid
                   }
-                  className="w-full bg-[#4ba3e2] hover:bg-blue-500 disabled:opacity-50 text-white font-medium py-3 rounded-lg transition-all flex justify-center items-center gap-2 shadow-sm"
+                  className="w-full bg-[#4ba3e2] hover:bg-blue-500 disabled:opacity-50 text-white font-medium py-4 rounded-xl transition-all flex justify-center items-center gap-2 shadow-sm"
                 >
                   {isProcessing ? (
                     <div className="flex items-center gap-2">
@@ -603,7 +649,7 @@ export default function QuoterForm({ isEmbedded = false }) {
       </div>
 
       {/* ── FOOTER CONTROLS ──────────────────────────────────────────────── */}
-      <div className="mt-8 flex justify-between items-center px-4">
+      <div className="mt-8 flex flex-col gap-4 md:flex-row justify-between items-center px-4">
         {(currentStep > 0 && step.id !== 'submit') ? (
           <button
             onClick={handleBack}
@@ -619,7 +665,7 @@ export default function QuoterForm({ isEmbedded = false }) {
           <button
             onClick={handleNext}
             disabled={!canProceed()}
-            className="px-8 py-3 bg-blue-600 text-white rounded-full font-bold uppercase tracking-wider text-xs shadow-xl hover:bg-blue-700 transition-all flex items-center gap-2 disabled:bg-slate-300 disabled:shadow-none"
+            className="w-full md:w-auto px-8 py-4 bg-blue-600 text-white rounded-full font-bold uppercase tracking-wider text-xs shadow-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2 disabled:bg-slate-300 disabled:shadow-none"
           >
             {currentStep === STEPS.length - 1 ? 'Show My Estimate' : 'Continue'} <ChevronRight size={16} />
           </button>

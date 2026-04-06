@@ -1,16 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Zap, DollarSign, Star, PhoneCall, User, Mail,
   Home as HomeIcon, MessageSquare, ClipboardCheck,
   ShieldCheck, Key, Award, Handshake, ArrowRight,
-  Play, CheckCircle2, ChevronRight
+  Play, CheckCircle2, ChevronLeft, ChevronRight
 } from 'lucide-react'
 import GoogleReviews from '../components/reviews/GoogleReviews'
 import BeforeAfterSlider from '../components/portfolio/BeforeAfterSlider'
 import ViralVideos from '../components/home/ViralVideos'
 import QuoterForm from '../components/quoter/QuoterForm'
+import { supabase } from '../integrations/supabase/client.js'
+import { getSessionId } from '../utils/analytics.js'
+import { useToast } from '../hooks/use-toast.js'
+import { usePageMetadata } from '../hooks/usePageMetadata.jsx'
 
 // ─── Reusable Components ──────────────────────────────────────────────────
 
@@ -102,8 +107,44 @@ const HERO_IMAGES = [
   '/assets/materials/outdoor-sink.jpg'
 ]
 
+const CONTACT_IMAGES = [
+  { src: '/assets/Contact/1.jpg', alt: 'Family enjoying a completed patio project', label: 'Family Patio Success' },
+  { src: '/assets/Contact/2.jpg', alt: 'Outdoor living area with custom lighting', label: 'Custom Outdoor Living' },
+  { src: '/assets/Contact/3.jpg', alt: 'High-end patio installation at night', label: 'Premium Lighting & Design' },
+  { src: '/assets/Contact/4.jpg', alt: 'Modern backyard renovation in Houston', label: 'Modern Backyard Renovation' }
+]
+
+const DEFAULT_CONTACT_FORM = {
+  name: '',
+  phone: '',
+  email: '',
+  projectType: '',
+  message: ''
+}
+
 export default function Home() {
   const [imageIndex, setImageIndex] = useState(0)
+  const [contactSlide, setContactSlide] = useState(0)
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    projectType: '',
+    message: ''
+  })
+  const [contactSaved, setContactSaved] = useState(false)
+  const [contactIsSubmitting, setContactIsSubmitting] = useState(false)
+  const [contactSubmitted, setContactSubmitted] = useState(false)
+  const [contactSubmitMessage, setContactSubmitMessage] = useState('')
+  const contactFirstRender = useRef(true)
+  const { toast } = useToast()
+
+  usePageMetadata({
+    title: 'FixMyHome LLC | Houston Outdoor Living Experts',
+    description: 'Luxury patios, pergolas, outdoor kitchens, and home renovation services in Houston, Cypress, Katy, and surrounding areas.',
+    url: 'https://fixmyhomellc.com/',
+    image: '/assets/materials/gable-roof.jpg'
+  })
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -112,10 +153,102 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [])
 
+  useEffect(() => {
+    const savedForm = localStorage.getItem('home_contact_form_draft')
+    if (savedForm) {
+      try {
+        const parsed = JSON.parse(savedForm)
+        setContactForm({
+          ...DEFAULT_CONTACT_FORM,
+          ...parsed
+        })
+      } catch (error) {
+        console.warn('Could not parse saved contact draft', error)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (contactFirstRender.current) {
+      contactFirstRender.current = false
+      return
+    }
+
+    localStorage.setItem('home_contact_form_draft', JSON.stringify(contactForm))
+    setContactSaved(true)
+    const timeout = setTimeout(() => setContactSaved(false), 1800)
+    return () => clearTimeout(timeout)
+  }, [contactForm])
+
+  useEffect(() => {
+    const sliderTimer = setInterval(() => {
+      setContactSlide((prev) => (prev + 1) % CONTACT_IMAGES.length)
+    }, 5000)
+    return () => clearInterval(sliderTimer)
+  }, [])
+
+  const handleContactFieldChange = (field) => (event) => {
+    setContactForm(prev => ({ ...prev, [field]: event.target.value }))
+  }
+
+  const handleContactFormKeyDown = (event) => {
+    if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+      event.preventDefault()
+    }
+  }
+
+  const handleContactSubmit = async (event) => {
+    event.preventDefault()
+    setContactIsSubmitting(true)
+    setContactSubmitted(false)
+    setContactSubmitMessage('')
+
+    try {
+      const response = await supabase.functions.invoke('submit-patio-lead', {
+        body: {
+          roofType: '',
+          flooring: '',
+          columns: '',
+          kitchenFeatures: [],
+          extraFeatures: [],
+          area: 300,
+          sessionId: getSessionId(),
+          contact_name: contactForm.name,
+          contact_phone: contactForm.phone,
+          contact_preference: 'call',
+          phone_verification: null,
+          project_type: contactForm.projectType,
+          project_message: contactForm.message,
+          contact_email: contactForm.email
+        }
+      })
+
+      if (response.error) {
+        throw response.error
+      }
+
+      setContactSubmitted(true)
+      setContactSubmitMessage('Formulario enviado con éxito. Nos contactaremos en breve.')
+      toast({ title: 'Formulario enviado', description: 'Gracias, recibimos tu solicitud.', duration: 5000 })
+      setContactForm({ name: '', phone: '', email: '', projectType: '', message: '' })
+      localStorage.removeItem('home_contact_form_draft')
+      setContactSaved(false)
+    } catch (error) {
+      console.error('Contact form submission error:', error)
+      setContactSubmitMessage('No se pudo enviar el formulario. Por favor intenta de nuevo.')
+      toast({ title: 'Error al enviar', description: 'Hubo un problema al enviar el formulario.', variant: 'destructive' })
+    } finally {
+      setContactIsSubmitting(false)
+    }
+  }
+
+  const nextContactSlide = () => setContactSlide((prev) => (prev + 1) % CONTACT_IMAGES.length)
+  const prevContactSlide = () => setContactSlide((prev) => (prev - 1 + CONTACT_IMAGES.length) % CONTACT_IMAGES.length)
+
   return (
     <div className="bg-white">
       {/* ── HERO SECTION ────────────────────────────────────────────────── */}
-      <section className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden bg-slate-950">
+      <section className="relative min-h-[90vh] md:min-h-screen p-6 md:p-20 flex items-center overflow-hidden bg-slate-950">
         {/* Background Carousel */}
         <div className="absolute inset-0 z-0 bg-slate-950">
           <AnimatePresence mode="wait">
@@ -293,10 +426,7 @@ export default function Home() {
             <div className="flex-1">
               <div className="relative rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.2)] aspect-[4/5] bg-slate-100 touch-pan-y">
                 <BeforeAfterSlider
-                  beforeImg="/assets/patio-before-sample.jpg"
-                  afterImg="/assets/patio-after-sample.jpg"
                   aspect="aspect-[4/5]"
-
                 />
               </div>
 
@@ -408,7 +538,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── QUOTER WIZARD INTEGRATION ───────────────────────────────────── */}
+{/* ── QUOTER WIZARD INTEGRATION ───────────────────────────────────── */}
       <section className="py-24 md:py-40 bg-slate-50" id="quote">
         <div className="container mx-auto px-6">
           <div className="text-center mb-20">
@@ -423,34 +553,201 @@ export default function Home() {
 
           </div>
         </div>
-      </section>
 
-      {/* ── FOOTER ──────────────────────────────────────────────────────── */}
-      <footer className="py-20 bg-white border-t border-slate-100">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-12">
-            <div>
-              <img
-                src="/assets/fixmyhome-logo-black.png"
-                alt="FixMyHome"
-                className="h-10 w-auto mb-2"
+        
+      </section> 
+
+
+      {/* ── CONTACT ───────────────────────────────────── */}
+      <section id="contact" className="py-20 md:py-32 bg-slate-900 relative overflow-hidden">
+  <div className="absolute top-0 right-0 w-1/3 h-full bg-blue-600/5 skew-x-12 translate-x-1/2 z-0"></div>
+
+  <div className="container mx-auto px-4 md:px-6 relative z-10">
+    <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
+
+      {/* Left Column */}
+      <div className="lg:w-1/2 order-1 w-full text-center lg:text-left">
+        <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6 justify-center lg:justify-start">
+          <div className="h-[1.5px] md:h-[2px] w-8 md:w-12 bg-accent-blue"></div>
+          <span className="uppercase tracking-[0.3em] md:tracking-[0.4em] text-[9px] md:text-[10px] font-bold text-accent-blue">
+            Your Trusted Partner
+          </span>
+        </div>
+
+        <h2 className="text-3xl md:text-6xl font-black text-white mb-8 tracking-tighter italic uppercase leading-[1.1] md:leading-none">
+          Building <span className="text-blue-500">Relationships</span>, <br /> One Home at a Time
+        </h2>
+
+        {/* Contact Gallery */}
+        <div className="relative mb-8">
+          <div className="relative rounded-[30px] overflow-hidden shadow-2xl h-[320px] md:h-[430px] bg-slate-800 border border-white/10">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={contactSlide}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+                className="absolute inset-0"
+              >
+                <img
+                  src={CONTACT_IMAGES[contactSlide].src}
+                  alt={CONTACT_IMAGES[contactSlide].alt}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-10" />
+              </motion.div>
+            </AnimatePresence>
+
+            <div className="absolute left-6 top-6 z-20 bg-slate-950/70 backdrop-blur-sm px-4 py-3 rounded-full border border-white/10 text-white text-xs uppercase tracking-[0.24em] font-bold">
+              {CONTACT_IMAGES[contactSlide].label}
+            </div>
+
+            <button
+              type="button"
+              onClick={prevContactSlide}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 rounded-full bg-slate-950/70 p-3 text-white shadow-lg border border-white/10 hover:bg-slate-900 transition"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={nextContactSlide}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 rounded-full bg-slate-950/70 p-3 text-white shadow-lg border border-white/10 hover:bg-slate-900 transition"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+
+          <div className="mt-4 flex justify-center gap-2">
+            {CONTACT_IMAGES.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => setContactSlide(index)}
+                className={`h-2.5 w-2.5 rounded-full transition-colors ${index === contactSlide ? 'bg-blue-500' : 'bg-slate-500/50 hover:bg-slate-400'}`}
               />
-              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Houston Construction Group</p>
-            </div>
-
-            <div className="flex gap-12">
-              {[
-                { name: 'Instagram', url: 'https://www.instagram.com/fixmyhomellc/' },
-
-              ].map(s => (
-                <a key={s.name} href={s.url} target={s.url !== '#' ? "_blank" : undefined} rel={s.url !== '#' ? "noopener noreferrer" : undefined} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors uppercase">{s.name}</a>
-              ))}
-            </div>
-
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">© 2026 FixMyHome LLC. All rights reserved.</p>
+            ))}
           </div>
         </div>
-      </footer>
+
+        {/* Phone CTA */}
+        <div className="flex items-center gap-4 md:gap-6 p-6 md:p-8 bg-blue-600 rounded-3xl text-white max-w-md mx-auto lg:mx-0 shadow-xl shadow-blue-600/20">
+          <div className="w-14 h-14 md:w-16 md:h-16 bg-white/10 backdrop-blur-sm text-white rounded-full flex items-center justify-center shrink-0">
+            <i data-lucide="phone-call" size="28"></i>
+          </div>
+          <div className="text-left">
+            <span className="block text-white/70 text-[10px] uppercase font-bold tracking-widest">
+              Call us Today
+            </span>
+            <span className="text-xl md:text-2xl font-bold tracking-tight">+1 (832) 744-5283</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Column — Contact Form */}
+      <div className="lg:w-1/2 order-2 w-full pt-10 md:pt-0">
+        <div className="bg-white p-8 md:p-14 rounded-[40px] md:rounded-[50px] shadow-2xl border border-slate-100">
+          <h3 className="text-2xl md:text-3xl font-black mb-2 text-slate-950 italic uppercase tracking-tighter text-center md:text-left">
+            Let's Build Together
+          </h3>
+          <p className="text-slate-500 text-sm md:text-base mb-10 text-center md:text-left font-light">
+            Tell us about your dream project. We respond within 24 hours.
+          </p>
+
+          <form onSubmit={handleContactSubmit} onKeyDown={handleContactFormKeyDown} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="relative">
+                <i data-lucide="user" className="absolute left-5 top-5 text-slate-400" size="18"></i>
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={contactForm.name}
+                  onChange={handleContactFieldChange('name')}
+                  className="w-full bg-slate-50 border border-slate-100 p-5 pl-14 rounded-2xl outline-none focus:ring-2 focus:ring-blue-200 transition-all font-medium text-sm"
+                />
+              </div>
+              <div className="relative">
+                <i data-lucide="phone" className="absolute left-5 top-5 text-slate-400" size="18"></i>
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={contactForm.phone}
+                  onChange={handleContactFieldChange('phone')}
+                  className="w-full bg-slate-50 border border-slate-100 p-5 pl-14 rounded-2xl outline-none focus:ring-2 focus:ring-blue-200 transition-all font-medium text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="relative">
+                <i data-lucide="mail" className="absolute left-5 top-5 text-slate-400" size="18"></i>
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  value={contactForm.email}
+                  onChange={handleContactFieldChange('email')}
+                  className="w-full bg-slate-50 border border-slate-100 p-5 pl-14 rounded-2xl outline-none focus:ring-2 focus:ring-blue-200 transition-all font-medium text-sm"
+                />
+              </div>
+              <div className="relative">
+                <i data-lucide="home" className="absolute left-5 top-5 text-slate-400" size="18"></i>
+                <select
+                  value={contactForm.projectType}
+                  onChange={handleContactFieldChange('projectType')}
+                  className="w-full bg-slate-50 border border-slate-100 p-5 pl-14 rounded-2xl outline-none focus:ring-2 focus:ring-blue-200 transition-all font-medium text-sm text-slate-500 appearance-none"
+                >
+                <option value="" disabled>
+                  Project Type
+                </option>
+                <option value="Luxury Patio Cover">Luxury Patio Cover</option>
+                <option value="Home Renovation">Home Renovation</option>
+                <option value="New Construction">New Construction</option>
+              </select>
+            </div>
+          </div>
+
+            <div className="relative">
+              <i data-lucide="message-square" className="absolute left-5 top-5 text-slate-400" size="18"></i>
+              <textarea
+                placeholder="Describe your dream project..."
+                rows="5"
+                value={contactForm.message}
+                onChange={handleContactFieldChange('message')}
+                className="w-full bg-slate-50 border border-slate-100 p-5 pl-14 rounded-2xl outline-none focus:ring-2 focus:ring-blue-200 transition-all font-medium text-sm"
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              disabled={contactIsSubmitting || !contactForm.name?.trim() || !contactForm.phone?.trim()}
+              className="btn-primary w-full py-6 rounded-2xl font-black uppercase text-xs md:text-sm tracking-widest text-white shadow-lg shadow-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {contactIsSubmitting ? 'Enviando...' : 'Submit Request'}
+            </button>
+            {contactSubmitted && (
+              <div className="rounded-3xl bg-emerald-50 border border-emerald-200 p-4 text-center text-sm text-emerald-800">
+                {contactSubmitMessage}
+              </div>
+            )}
+            {!contactSubmitted && (
+              <p className="text-center text-xs text-slate-400">
+                {contactSaved ? 'Últimos cambios guardados.' : 'Tus datos se guardan automáticamente mientras escribes.'}
+              </p>
+            )}
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+      
+
+                
+
+      {/* Footer shared globally via App.jsx */}
     </div>
   )
 }

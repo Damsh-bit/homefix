@@ -1,11 +1,19 @@
-import { Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import Home from './pages/Home'
 import Quoter from './pages/Quoter'
 import Portfolio from './pages/Portfolio'
 import Team from './pages/Team'
 
 export default function App() {
+  const location = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [location.pathname])
+
   return (
     <>
       <Navbar />
@@ -15,6 +23,7 @@ export default function App() {
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/team" element={<Team />} />
       </Routes>
+      <Footer />
     </>
   )
 }

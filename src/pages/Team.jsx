@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ChevronDown, Phone, ArrowLeft } from 'lucide-react'
-import Footer from '../components/Footer'
+import { usePageMetadata } from '../hooks/usePageMetadata.jsx'
 
 const TEAM_MEMBERS = [
   {
@@ -43,6 +43,13 @@ const TEAM_MEMBERS = [
 ]
 
 export default function Team() {
+  usePageMetadata({
+    title: 'Leadership | FixMyHome LLC — Houston Outdoor Living Experts',
+    description: 'Meet the FixMyHome LLC leadership team driving high-end patio, pergola, and renovation projects throughout Houston.',
+    url: 'https://fixmyhomellc.com/team',
+    image: '/assets/team-photo.png'
+  })
+
   return (
     <div className="bg-white min-h-screen pt-24 pb-0 flex flex-col font-sans overflow-hidden">
       {/* Animated BG elements */}
@@ -200,11 +207,6 @@ export default function Team() {
           </div>
         </motion.div>
 
-      </div>
-      
-      {/* Footer */}
-      <div className="bg-white border-t border-slate-100">
-        <Footer />
       </div>
     </div>
   )
