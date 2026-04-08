@@ -29,13 +29,17 @@ const PROJECTS = [
 ]
 
 export default function BeforeAfterSlider({
-  aspect = "aspect-[16/9]"
+  aspect = "aspect-[16/9]",
+  beforeImg,
+  afterImg,
+  title,
+  description
 }) {
-  const [currentProject, setCurrentProject] = useState(0)
   const [sliderPosition, setSliderPosition] = useState(50)
   const containerRef = useRef(null)
 
-  const currentProjectData = PROJECTS[currentProject]
+  // If props provided, use them; else use default project
+  const projectData = beforeImg ? { beforeImg, afterImg, title, description } : PROJECTS[0]
 
   const handleMove = (e) => {
     if (!containerRef.current) return
@@ -79,94 +83,56 @@ export default function BeforeAfterSlider({
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentProject}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.5 }}
-            className="relative w-full h-full"
+        <div className="relative w-full h-full">
+          {/* After Image (Background) */}
+          <img
+            src={projectData.afterImg}
+            alt="After"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+
+          {/* Before Image (Foreground with Clip) */}
+          <div
+            className="absolute inset-0 w-full h-full"
+            style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
           >
-            {/* After Image (Background) */}
             <img
-              src={currentProjectData.afterImg}
-              alt="After"
+              src={projectData.beforeImg}
+              alt="Before"
               className="absolute inset-0 w-full h-full object-cover"
             />
+          </div>
 
-            {/* Before Image (Foreground with Clip) */}
-            <div
-              className="absolute inset-0 w-full h-full"
-              style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-            >
-              <img
-                src={currentProjectData.beforeImg}
-                alt="Before"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+          {/* Slider Bar */}
+          <div
+            className="absolute top-0 bottom-0 z-30 w-1 bg-white cursor-ew-resize group"
+            style={{ left: `${sliderPosition}%` }}
+          >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-2xl flex items-center justify-center gap-1.5 border-[6px] border-blue-600/20 group-hover:scale-110 transition-transform">
+               <div className="w-1 h-4 bg-blue-600 rounded-full" />
+               <div className="w-1 h-4 bg-blue-600 rounded-full" />
             </div>
+          </div>
 
-            {/* Slider Bar */}
-            <div
-              className="absolute top-0 bottom-0 z-30 w-1 bg-white cursor-ew-resize group"
-              style={{ left: `${sliderPosition}%` }}
-            >
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-2xl flex items-center justify-center gap-1.5 border-[6px] border-blue-600/20 group-hover:scale-110 transition-transform">
-                 <div className="w-1 h-4 bg-blue-600 rounded-full" />
-                 <div className="w-1 h-4 bg-blue-600 rounded-full" />
-              </div>
-            </div>
-
-            {/* Labels */}
-            <div className="absolute bottom-6 left-6 z-20 px-4 py-2 bg-slate-950/60 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-white border border-white/10">
-              Before Transformation
-            </div>
-            <div className="absolute bottom-6 right-6 z-20 px-4 py-2 bg-blue-600/80 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-white border border-white/10">
-              After Architecture
-            </div>
-          </motion.div>
-        </AnimatePresence>
+          {/* Labels */}
+          <div className="absolute bottom-6 left-6 z-20 px-4 py-2 bg-slate-950/60 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-white border border-white/10">
+            Before
+          </div>
+          <div className="absolute bottom-6 right-6 z-20 px-4 py-2 bg-blue-600/80 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-white border border-white/10">
+            After
+          </div>
+        </div>
       </div>
 
-      {/* Navigation Arrows */}
-      <button
-        onClick={prevProject}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-40 w-12 h-12 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center hover:bg-white transition-colors border border-white/20"
-      >
-        <ChevronLeft size={20} className="text-slate-700" />
-      </button>
-      <button
-        onClick={nextProject}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-40 w-12 h-12 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center hover:bg-white transition-colors border border-white/20"
-      >
-        <ChevronRight size={20} className="text-slate-700" />
-      </button>
-
-      {/* Project Dots */}
-      <div className="flex justify-center gap-2 mt-6">
-        {PROJECTS.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToProject(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentProject
-                ? 'bg-blue-600 scale-125'
-                : 'bg-slate-300 hover:bg-slate-400'
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* Project Info */}
-      <div className="mt-4 text-center">
-        <h3 className="text-lg font-bold text-slate-900 mb-1">
-          {currentProjectData.title}
-        </h3>
-        <p className="text-sm text-slate-600">
-          {currentProjectData.description}
-        </p>
-      </div>
+      {/* Project Title */}
+      {projectData.title && (
+        <div className="mt-4 text-center">
+          <h3 className="font-black uppercase text-sm tracking-widest text-slate-900 mb-1">{projectData.title}</h3>
+          {projectData.description && (
+            <p className="text-slate-500 text-xs font-light">{projectData.description}</p>
+          )}
+        </div>
+      )}
     </div>
   )
 }
