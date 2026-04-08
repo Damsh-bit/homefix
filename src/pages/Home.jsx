@@ -636,7 +636,7 @@ export default function Home() {
                         key={i}
                         className={`flex-shrink-0 ${itemsPerView === 1 ? 'w-full' : 'w-1/2'} h-[350px] md:h-[400px] px-2 md:px-3`}
                       >
-                        <div className="relative w-full h-full overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all group cursor-pointer bg-slate-100">
+                        <div className="relative w-full h-full overflow-hidden transition-all group cursor-pointer border-4 border-white/10">
                           <img
                             src={item.src}
                             alt={item.label}
@@ -702,7 +702,7 @@ export default function Home() {
       {/* ── FEATURED WORKS (PORTFOLIO PREVIEW) ────────────────────────── */}
       <section className="py-24 md:py-40 bg-slate-950" id="portfolio">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+          <div className="flex flex-col md:flex-row justify-center md:justify-between items-center md:items-end gap-8 mb-16 text-center md:text-left">
             <div className="flex-1">
               <SectionTitle
                 light
@@ -713,7 +713,7 @@ export default function Home() {
             </div>
             <Link
               to="/portfolio"
-              className="px-10 py-5 bg-white border border-white/10 text-dark rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-black/50 hover:text-white transition-all flex items-center gap-3 mb-16"
+              className="px-10 py-5 bg-white border border-white/10 text-dark rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-black/50 hover:text-white transition-all flex items-center gap-3 mb-0 md:mb-16 whitespace-nowrap"
             >
               Explore Full Gallery <ArrowRight size={14} />
             </Link>

@@ -18,9 +18,9 @@ export default function ViralVideos() {
     <section className="py-24 bg-white overflow-hidden" id="transformations">
       <div className="max-w-[1400px] mx-auto px-6">
         
-        <div className="flex flex-col md:flex-row items-end justify-between gap-8 mb-16">
-           <div className="flex-1">
-              <div className="flex items-center gap-3 mb-6">
+        <div className="flex flex-col md:flex-row items-center md:items-end justify-center md:justify-between gap-8 mb-16">
+           <div className="flex-1 text-center md:text-left">
+              <div className="flex items-center gap-3 mb-6 justify-center md:justify-start">
                  <div className="w-10 h-10 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center">
                     <TrendingUp size={20} />
                  </div>
