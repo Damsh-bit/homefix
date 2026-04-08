@@ -553,7 +553,6 @@ export default function Home() {
                 </span>
               </motion.div>
 
-<<<<<<< HEAD
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -563,39 +562,6 @@ export default function Home() {
               >
                 See The <span className="text-blue-600">Transformation</span> <br /> Before You Decide
               </motion.h2>
-=======
-            <div className="flex-1">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <BeforeAfterSlider
-                  aspect="aspect-[4/5]"
-                  beforeImg="https://picsum.photos/seed/before1/400/300"
-                  afterImg="https://picsum.photos/seed/after1/400/300"
-                  title="Modern Patio Renovation"
-                  description="Complete backyard transformation"
-                />
-                <BeforeAfterSlider
-                  aspect="aspect-[4/5]"
-                  beforeImg="https://picsum.photos/seed/before2/400/300"
-                  afterImg="https://picsum.photos/seed/after2/400/300"
-                  title="Outdoor Kitchen Build"
-                  description="Custom outdoor cooking space"
-                />
-                <BeforeAfterSlider
-                  aspect="aspect-[4/5]"
-                  beforeImg="https://picsum.photos/seed/before3/400/300"
-                  afterImg="https://picsum.photos/seed/after3/400/300"
-                  title="Pergola Installation"
-                  description="Elegant shaded structure"
-                />
-                <BeforeAfterSlider
-                  aspect="aspect-[4/5]"
-                  beforeImg="https://picsum.photos/seed/before4/400/300"
-                  afterImg="https://picsum.photos/seed/after4/400/300"
-                  title="Deck Expansion"
-                  description="Extended outdoor living area"
-                />
-              </div>
->>>>>>> 34649fc8c1e6f5c95c5c03e2d874936b3a223122
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -621,11 +587,7 @@ export default function Home() {
               <motion.div
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-<<<<<<< HEAD
                 className="bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-100 w-full mb-8"
-=======
-                className="mt-8 bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-[480px] mx-auto lg:mx-0 z-20"
->>>>>>> 34649fc8c1e6f5c95c5c03e2d874936b3a223122
               >
                 <div className="flex gap-1 text-yellow-400 mb-3">
                   {[...Array(5)].map((_, i) => <Star key={i} size={12} fill="currentColor" />)}
