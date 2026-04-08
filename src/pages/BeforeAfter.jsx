@@ -102,29 +102,22 @@ export default function BeforeAfter() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {BEFORE_AFTER_IMAGES.map((image, index) => (
-              <motion.div
+              <motion.img
                 key={index}
+                src={image.src}
+                alt={image.label}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: (index % 6) * 0.05 }}
-                whileHover={{ y: -8 }}
+                whileHover={{ scale: 1.05 }}
                 onClick={() => setSelectedImage(index)}
-                className="group relative aspect-square rounded-[2rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all border border-slate-100 cursor-pointer bg-slate-100"
-              >
-                <img
-                  src={image.src}
-                  alt={image.label}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <p className="text-white font-bold text-lg">{image.label}</p>
-                </div>
-              </motion.div>
+                className="w-full h-auto rounded-lg shadow-lg hover:shadow-xl transition-all cursor-pointer"
+                loading="lazy"
+              />
             ))}
           </motion.div>
         </div>
