@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import Quoter from './pages/Quoter'
 import Portfolio from './pages/Portfolio'
 import Team from './pages/Team'
+import BeforeAfter from './pages/BeforeAfter'
 
 export default function App() {
   const location = useLocation()
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/quote" element={<Quoter />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/team" element={<Team />} />
+        <Route path="/before-after" element={<BeforeAfter />} />
       </Routes>
       <Footer />
     </>

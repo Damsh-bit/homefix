@@ -20,6 +20,7 @@ export default function Navbar() {
 
   const navLinks = [
     { label: 'Portfolio', href: '/portfolio' },
+    { label: 'Before & After', href: '/before-after' },
     { label: 'Team', href: '/team' },
   ]
 

@@ -9,7 +9,6 @@ import {
   Play, CheckCircle2, ChevronLeft, ChevronRight
 } from 'lucide-react'
 import GoogleReviews from '../components/reviews/GoogleReviews'
-import BeforeAfterSlider from '../components/portfolio/BeforeAfterSlider'
 import ViralVideos from '../components/home/ViralVideos'
 import QuoterForm from '../components/quoter/QuoterForm'
 import { supabase } from '../integrations/supabase/client.js'
@@ -102,6 +101,19 @@ function SectionTitle({ subtitle, title, description, light = false }) {
 const HERO_IMAGE_DESKTOP = '/assets/Team.webp'
 const HERO_IMAGE_MOBILE = '/assets/team_mobile.webp'
 
+const BEFORE_AFTER_GALLERY = [
+  { src: '/assets/before-after/Beige Minimalist Beauty Before After Collage Instagram Post-7.webp', label: 'Patio Transformation' },
+  { src: '/assets/before-after/Beige Minimalist Beauty Before After Collage Instagram Post-8.webp', label: 'Outdoor Living Space' },
+  { src: '/assets/before-after/Beige Minimalist Beauty Before After Collage Instagram Post-9.webp', label: 'Backyard Renovation' },
+  { src: '/assets/before-after/Beige Minimalist Beauty Before After Collage Instagram Post-10.webp', label: 'Modern Design' },
+  { src: '/assets/before-after/Beige Minimalist Beauty Before After Collage Instagram Post-11.webp', label: 'Complete Makeover' },
+  { src: '/assets/before-after/Beige Minimalist Beauty Before After Collage Instagram Post-12.webp', label: 'Luxury Patio' },
+  { src: '/assets/before-after/Beige Minimalist Beauty Before After Collage Instagram Post-13.webp', label: 'Pergola Installation' },
+  { src: '/assets/before-after/Beige Minimalist Beauty Before After Collage Instagram Post-14.webp', label: 'Entertaining Space' },
+  { src: '/assets/before-after/Beige Minimalist Beauty Before After Collage Instagram Post-15.webp', label: 'Outdoor Kitchen' },
+  { src: '/assets/before-after/Beige Minimalist Beauty Before After Collage Instagram Post-16.webp', label: 'Fire Pit Area' }
+]
+
 const TEAM_MEMBERS = [
   { name: 'Miguel Isaguirre', role: 'Founder & CEO', img: '/assets/miguel-isaguirre.webp' },
   { name: 'Lirisse N. Salazar', role: 'Chief Operating Officer', img: '/assets/lirisse-salazar.webp' },
@@ -136,6 +148,7 @@ const DEFAULT_CONTACT_FORM = {
 export default function Home() {
   const [teamSlide, setTeamSlide] = useState(0)
   const [contactSlide, setContactSlide] = useState(0)
+  const [beforeAfterSlide, setBeforeAfterSlide] = useState(0)
   const [contactForm, setContactForm] = useState({
     name: '',
     phone: '',
@@ -198,6 +211,13 @@ export default function Home() {
     return () => clearInterval(teamTimer)
   }, [])
 
+  useEffect(() => {
+    const beforeAfterTimer = setInterval(() => {
+      setBeforeAfterSlide((prev) => (prev + 1) % BEFORE_AFTER_GALLERY.length)
+    }, 5000)
+    return () => clearInterval(beforeAfterTimer)
+  }, [])
+
   const handleContactFieldChange = (field) => (event) => {
     setContactForm(prev => ({ ...prev, [field]: event.target.value }))
   }
@@ -258,6 +278,19 @@ export default function Home() {
 
   const nextTeamSlide = () => setTeamSlide((prev) => (prev + 1) % TEAM_MEMBERS.length)
   const prevTeamSlide = () => setTeamSlide((prev) => (prev - 1 + TEAM_MEMBERS.length) % TEAM_MEMBERS.length)
+
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024)
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const itemsPerView = windowWidth < 768 ? 1 : 2
+
+  const nextBeforeAfterSlide = () => setBeforeAfterSlide((prev) => (prev + 1) % BEFORE_AFTER_GALLERY.length)
+  const prevBeforeAfterSlide = () => setBeforeAfterSlide((prev) => (prev - 1 + BEFORE_AFTER_GALLERY.length) % BEFORE_AFTER_GALLERY.length)
 
   return (
     <div className="bg-white">
@@ -503,61 +536,163 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ── AI VISUALIZER SECTION ────────────────────────────────────────── */}
+      {/* ── TRANSFORMATION GALLERY SECTION ────────────────────────────────── */}
       <section className="py-12 md:py-20 bg-white overflow-hidden">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center gap-20">
-            <div className="flex-1">
-              <SectionTitle
-                subtitle="Future Construction"
-                title={<>Visualize Before <br /> You <span className="text-blue-600">Build</span></>}
-                description="Our AI-powered visualization tool transforms a photo of your existing space into a hyper-realistic render of the final project in minutes."
-              />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-                {[
-                  { icon: <Zap className="text-blue-600" />, title: 'Design in Minutes', desc: 'Instant preview of materials, structures, and styles.' },
-                  { icon: <DollarSign className="text-blue-600" />, title: 'Accurate Quoting', desc: 'Budget estimations based on the exact visual design.' }
-                ].map((feat, i) => (
-                  <motion.div
-                    key={i}
-                    whileHover={{ y: -5 }}
-                    className="p-8 bg-slate-50 rounded-[2rem] border border-slate-100"
-                  >
-                    <div className="mb-4">{feat.icon}</div>
-                    <h4 className="font-black uppercase text-xs tracking-widest mb-2">{feat.title}</h4>
-                    <p className="text-slate-500 text-sm font-light leading-relaxed">{feat.desc}</p>
-                  </motion.div>
-                ))}
-              </div>
-
-              <Link
-                to="/quote"
-                className="inline-flex px-10 py-5 bg-slate-900 text-white rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-blue-600 transition-colors shadow-2xl shadow-slate-200"
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left Column - Text */}
+            <div className="flex flex-col items-start justify-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="mb-6"
               >
-                Try Free Visualizer
-              </Link>
-            </div>
+                <span className="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-[11px] font-black uppercase tracking-widest mb-4">
+                  Real Projects. Real Results.
+                </span>
+              </motion.div>
 
-            <div className="flex-1">
-              <div className="relative rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.2)] aspect-[4/5] bg-slate-100 touch-pan-y">
-                <BeforeAfterSlider
-                  aspect="aspect-[4/5]"
-                />
-              </div>
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="text-4xl md:text-5xl font-black mb-6 uppercase italic tracking-tighter text-slate-900"
+              >
+                See The <span className="text-blue-600">Transformation</span> <br /> Before You Decide
+              </motion.h2>
 
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="text-lg font-light leading-relaxed text-slate-600 mb-6"
+              >
+                Explore real before-and-after projects and understand the impact of every design choice before starting your own.
+              </motion.p>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="text-base font-light leading-relaxed text-slate-500 mb-8"
+              >
+                From raw spaces to fully realized environments. Our gallery shows how ideas turn into tangible results — materials, structure, and design working together.
+              </motion.p>
+
+              {/* Testimonial */}
               <motion.div
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="  bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-[480px] lg:block z-20"
+                className="bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-100 w-full mb-8"
               >
-                <div className="flex gap-1 text-yellow-400 mb-4">
-                  {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
+                <div className="flex gap-1 text-yellow-400 mb-3">
+                  {[...Array(5)].map((_, i) => <Star key={i} size={12} fill="currentColor" />)}
                 </div>
-                <p className="text-sm font-light italic text-slate-600 leading-relaxed mb-4">
-                  "The AI preview was identical to the final construction. No surprises!"
+                <p className="text-sm font-light italic text-slate-600 leading-relaxed mb-3">
+                  "We couldn't believe the transformation. Our backyard went from neglected to a paradise."
                 </p>
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-900">— Satisfied Client</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-900">— The Rodriguez Family</span>
+              </motion.div>
+
+              {/* CTA Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <Link
+                  to="/before-after"
+                  className="group relative px-12 py-5 bg-blue-600 text-white rounded-full font-black uppercase tracking-widest text-xs flex items-center gap-3 overflow-hidden transition-all hover:bg-blue-700 hover:shadow-[0_0_40px_rgba(37,99,235,0.4)] shadow-lg"
+                >
+                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                  <span className="relative">View Full Gallery</span>
+                  <ArrowRight className="relative group-hover:translate-x-1 transition-transform" size={16} />
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* Right Column - Image Carousel */}
+            <div className="w-full">
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="relative w-full"
+              >
+                {/* Carousel Container */}
+                <div className="relative w-full overflow-hidden px-4 md:px-0">
+                  <motion.div
+                    animate={{ x: -beforeAfterSlide * (100 / itemsPerView) + '%' }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    className="flex"
+                  >
+                    {BEFORE_AFTER_GALLERY.map((item, i) => (
+                      <motion.div
+                        key={i}
+                        className={`flex-shrink-0 ${itemsPerView === 1 ? 'w-full' : 'w-1/2'} h-[350px] md:h-[400px] px-2 md:px-3`}
+                      >
+                        <div className="relative w-full h-full overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all group cursor-pointer bg-slate-100">
+                          <img
+                            src={item.src}
+                            alt={item.label}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </div>
+
+                {/* Navigation Buttons */}
+                <div className="flex gap-4 justify-between items-center mt-6">
+                  <button
+                    type="button"
+                    onClick={prevBeforeAfterSlide}
+                    className="rounded-full bg-blue-600 hover:bg-blue-700 p-3 text-white shadow-lg border border-blue-500 transition"
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
+
+                  {/* Slide Indicators */}
+                  <div className="flex gap-2 justify-center flex-wrap">
+                    {BEFORE_AFTER_GALLERY.map((_, index) => {
+                      // En desktop (2 items por vista), mostrar solo índices pares
+                      if (itemsPerView === 2 && index % 2 === 1) return null
+                      
+                      const isActive = itemsPerView === 2 ? index === Math.floor(beforeAfterSlide / 2) * 2 : index === beforeAfterSlide
+                      
+                      return (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => {
+                            if (itemsPerView === 2) {
+                              // En desktop, hacer que clickee en pares
+                              const pairIndex = Math.floor(index / 2) * 2
+                              setBeforeAfterSlide(pairIndex)
+                            } else {
+                              setBeforeAfterSlide(index)
+                            }
+                          }}
+                          className={`h-2.5 w-2.5 rounded-full transition-all ${isActive ? 'bg-blue-600 scale-150' : 'bg-slate-300 hover:bg-slate-400'}`}
+                        />
+                      )
+                    })}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={nextBeforeAfterSlide}
+                    className="rounded-full bg-blue-600 hover:bg-blue-700 p-3 text-white shadow-lg border border-blue-500 transition"
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                </div>
               </motion.div>
             </div>
           </div>

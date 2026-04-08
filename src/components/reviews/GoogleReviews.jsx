@@ -72,19 +72,66 @@ export default function GoogleReviews({ placeId = "homefix_id", apiKey = "" }) {
 
         </div>
 
-        {/* Rating Summary */}
-        <div className="flex flex-col items-center justify-center mb-10">
-          <div className="flex gap-1 text-amber-500 mb-2">
-            {[...Array(5)].map((_, i) => <Star key={i} size={24} fill="currentColor" stroke="none" />)}
+        {/* Rating Summary & Video Testimonials */}
+        <div className="mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start mb-12">
+            {/* Rating Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="flex flex-col items-center justify-center md:col-span-1"
+            >
+              <div className="flex gap-1 text-amber-500 mb-4">
+                {[...Array(5)].map((_, i) => <Star key={i} size={28} fill="currentColor" stroke="none" />)}
+              </div>
+              <p className="text-slate-600 font-medium text-lg text-center">
+                <span className="font-black text-3xl text-slate-900">{stats.rating.toFixed(1)}</span>
+                <span className="block text-sm mt-1">Rating of 12 reviews</span>
+              </p>
+            </motion.div>
+
+            {/* Video 1 - Vertical Reel */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="md:col-span-2"
+            >
+              <div className="relative w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all bg-slate-900 border-2 border-slate-800">
+                <video
+                  src="/assets/Video1.webm"
+                  className="w-full h-full object-cover"
+                  controls
+                  controlsList="nodownload"
+                  playsInline
+                />
+              </div>
+              <p className="text-center font-bold text-slate-700 mt-3">Client Testimonial</p>
+            </motion.div>
+
+            {/* Video 2 - Vertical Reel */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="md:col-span-2"
+            >
+              <div className="relative w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all bg-slate-900 border-2 border-slate-800">
+                <video
+                  src="/assets/Video2.webm"
+                  className="w-full h-full object-cover"
+                  controls
+                  controlsList="nodownload"
+                  playsInline
+                />
+              </div>
+              <p className="text-center font-bold text-slate-700 mt-3">Client Testimonial</p>
+            </motion.div>
           </div>
-          <p className="text-slate-600 font-medium text-lg">
-            <span className="font-bold">{stats.rating.toFixed(1)}</span> rating of 12 reviews
-          </p>
         </div>
-
-
-
-        {/* Reviews Carousel/Grid Wrapper */}
         <div className="relative overflow-visible">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <AnimatePresence mode="popLayout">
