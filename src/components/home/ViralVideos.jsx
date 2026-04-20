@@ -14,14 +14,14 @@ const VIDEOS = [
   { id: 2, src: video2, views: '840K', likes: '52K', type: 'video/webm' },
   { id: 3, src: video3, views: '2.1M', likes: '120K', type: 'video/webm' },
   { id: 4, src: video4, views: '950K', likes: '64K', type: 'video/webm' },
-  { id: 5, src: `${V_PATH}/110k patio español V3.mp4`, views: '110K', likes: '5K', type: 'video/mp4' },
-  { id: 6, src: `${V_PATH}/20260327_C6085.mp4`, views: '88K', likes: '3.2K', type: 'video/mp4' },
-  { id: 7, src: `${V_PATH}/IMG_0085.MOV`, views: '200K', likes: '12K', type: 'video/quicktime' },
-  { id: 8, src: `${V_PATH}/IMG_0332.MOV`, views: '150K', likes: '8K', type: 'video/quicktime' },
-  { id: 9, src: `${V_PATH}/IMG_0467.MOV`, views: '320K', likes: '20K', type: 'video/quicktime' },
-  { id: 10, src: `${V_PATH}/IMG_0776.MOV`, views: '95K', likes: '4K', type: 'video/quicktime' },
-  { id: 11, src: `${V_PATH}/Reel 1.mp4`, views: '410K', likes: '30K', type: 'video/mp4' },
-  { id: 12, src: `${V_PATH}/Reel 5.mp4`, views: '550K', likes: '45K', type: 'video/mp4' },
+  { id: 5, src: `${V_PATH}/110k patio español V3.webm`, views: '110K', likes: '5K', type: 'video/webm' },
+  { id: 6, src: `${V_PATH}/20260327_C6085.webm`, views: '88K', likes: '3.2K', type: 'video/webm' },
+  { id: 7, src: `${V_PATH}/IMG_0085.webm`, views: '200K', likes: '12K', type: 'video/webm' },
+  { id: 8, src: `${V_PATH}/IMG_0332.webm`, views: '150K', likes: '8K', type: 'video/webm' },
+  { id: 9, src: `${V_PATH}/IMG_0467.webm`, views: '320K', likes: '20K', type: 'video/webm' },
+  { id: 10, src: `${V_PATH}/IMG_0776.webm`, views: '95K', likes: '4K', type: 'video/webm' },
+  { id: 11, src: `${V_PATH}/Reel 1.webm`, views: '410K', likes: '30K', type: 'video/webm' },
+  { id: 12, src: `${V_PATH}/Reel 5.webm`, views: '550K', likes: '45K', type: 'video/webm' },
 ]
 
 export default function ViralVideos() {
