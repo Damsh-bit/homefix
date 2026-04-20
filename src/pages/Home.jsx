@@ -15,6 +15,7 @@ import { supabase } from '../integrations/supabase/client.js'
 import { getSessionId } from '../utils/analytics.js'
 import { useToast } from '../hooks/use-toast.js'
 import { usePageMetadata } from '../hooks/usePageMetadata.jsx'
+import { PORTFOLIO_PROJECTS } from '../data/portfolioData'
 
 // ─── Reusable Components ──────────────────────────────────────────────────
 
@@ -720,28 +721,28 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { src: '/assets/materials/gable-roof.jpg', label: 'Patio Covers', cat: 'Outdoor Living' },
-              { src: '/assets/materials/pool.jpg', label: 'Pools', cat: 'Oasis' },
-              { src: '/assets/materials/pergola.jpg', label: 'Shade Structures', cat: 'Architecture' },
-              { src: '/assets/materials/bbq-station.jpg', label: 'Outdoor Kitchens', cat: 'Culinary Space' },
-              { src: '/assets/materials/fireplace.jpg', label: 'Fire Features', cat: 'Ambiance' },
-              { src: '/assets/materials/hip-roof.jpg', label: 'Roofing', cat: 'Structural' }
-            ].map((work, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -10 }}
-                className="group relative aspect-[16/10] sm:aspect-[16/9] lg:aspect-[3/2] rounded-[1.5rem] overflow-hidden border border-white/5 shadow-2xl"
-              >
-                <img
-                  src={work.src}
-                  alt={work.label}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent p-6 flex flex-col justify-end">
-                  <h4 className="text-2xl font-bold text-white leading-tight">{work.label}</h4>
-                </div>
-              </motion.div>
+            {PORTFOLIO_PROJECTS.slice(0, 6).map((project, i) => (
+              <Link key={project.id} to={`/portfolio/${project.id}`}>
+                <motion.div
+                  whileHover={{ y: -10 }}
+                  className="group relative aspect-[16/10] sm:aspect-[16/9] lg:aspect-[3/2] rounded-[1.5rem] overflow-hidden border border-white/5 shadow-2xl"
+                >
+                  <img
+                    src={project.coverImage}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  />
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-1 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+                    style={{ backgroundColor: project.accentColor }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent p-6 flex flex-col justify-end">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-1">{project.category}</span>
+                    <h4 className="text-2xl font-bold text-white leading-tight">{project.title}</h4>
+                    <p className="text-slate-400 text-xs mt-1 font-light">{project.subtitle}</p>
+                  </div>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </div>

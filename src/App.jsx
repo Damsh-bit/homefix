@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import Home from './pages/Home'
 import Quoter from './pages/Quoter'
 import Portfolio from './pages/Portfolio'
+import ProjectDetail from './pages/ProjectDetail'
 import Team from './pages/Team'
 import BeforeAfter from './pages/BeforeAfter'
 
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/quote" element={<Quoter />} />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/portfolio/:projectId" element={<ProjectDetail />} />
         <Route path="/team" element={<Team />} />
         <Route path="/before-after" element={<BeforeAfter />} />
       </Routes>

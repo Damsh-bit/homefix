@@ -1,19 +1,43 @@
-import { motion } from 'framer-motion'
-import { Play, Heart, MessageCircle, TrendingUp, Check } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Play, Heart, MessageCircle, TrendingUp, Check, X } from 'lucide-react'
 
 import video1 from '../../assets/videos/video1.webm'
 import video2 from '../../assets/videos/video2.webm'
 import video3 from '../../assets/videos/video3.webm'
 import video4 from '../../assets/videos/video4.webm'
 
+const V_PATH = '/assets/Portfolio/Fix my home website pictures/Videos importantes para la página'
+
 const VIDEOS = [
-  { id: 1, src: video1, views: '1.2M', likes: '84K' },
-  { id: 2, src: video2, views: '840K', likes: '52K' },
-  { id: 3, src: video3, views: '2.1M', likes: '120K' },
-  { id: 4, src: video4, views: '950K', likes: '64K' },
+  { id: 1, src: video1, views: '1.2M', likes: '84K', type: 'video/webm' },
+  { id: 2, src: video2, views: '840K', likes: '52K', type: 'video/webm' },
+  { id: 3, src: video3, views: '2.1M', likes: '120K', type: 'video/webm' },
+  { id: 4, src: video4, views: '950K', likes: '64K', type: 'video/webm' },
+  { id: 5, src: `${V_PATH}/110k patio español V3.mp4`, views: '110K', likes: '5K', type: 'video/mp4' },
+  { id: 6, src: `${V_PATH}/20260327_C6085.mp4`, views: '88K', likes: '3.2K', type: 'video/mp4' },
+  { id: 7, src: `${V_PATH}/IMG_0085.MOV`, views: '200K', likes: '12K', type: 'video/quicktime' },
+  { id: 8, src: `${V_PATH}/IMG_0332.MOV`, views: '150K', likes: '8K', type: 'video/quicktime' },
+  { id: 9, src: `${V_PATH}/IMG_0467.MOV`, views: '320K', likes: '20K', type: 'video/quicktime' },
+  { id: 10, src: `${V_PATH}/IMG_0776.MOV`, views: '95K', likes: '4K', type: 'video/quicktime' },
+  { id: 11, src: `${V_PATH}/Reel 1.mp4`, views: '410K', likes: '30K', type: 'video/mp4' },
+  { id: 12, src: `${V_PATH}/Reel 5.mp4`, views: '550K', likes: '45K', type: 'video/mp4' },
 ]
 
 export default function ViralVideos() {
+  const [activeVideo, setActiveVideo] = useState(null)
+
+  useEffect(() => {
+    if (activeVideo) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [activeVideo])
+
   return (
     <section className="py-24 bg-white overflow-hidden" id="transformations">
       <div className="max-w-[1400px] mx-auto px-6">
@@ -50,7 +74,8 @@ export default function ViralVideos() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: idx * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="group relative aspect-[9/16] rounded-[2.5rem] overflow-hidden bg-slate-900 border border-slate-100 shadow-2xl"
+                onClick={() => setActiveVideo(video)}
+                className="group relative aspect-[9/16] rounded-[2.5rem] overflow-hidden bg-slate-900 border border-slate-100 shadow-2xl cursor-pointer"
               >
                  <video 
                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
@@ -59,7 +84,7 @@ export default function ViralVideos() {
                    playsInline
                    autoPlay
                  >
-                   <source src={video.src} type="video/webm" />
+                   <source src={video.src} type={video.type || 'video/mp4'} />
                  </video>
                  
                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent " />
@@ -103,6 +128,42 @@ export default function ViralVideos() {
         </div>
 
       </div>
+
+      {/* Video Lightbox Modal */}
+      <AnimatePresence>
+        {activeVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveVideo(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 sm:p-8"
+          >
+            <button 
+              onClick={() => setActiveVideo(null)}
+              className="absolute top-6 right-6 md:top-10 md:right-10 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors z-50"
+            >
+              <X size={24} />
+            </button>
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full h-[85vh] max-w-[65vh] rounded-[2rem] overflow-hidden bg-slate-900 shadow-2xl"
+            >
+              <video 
+                src={activeVideo.src} 
+                type={activeVideo.type || 'video/mp4'}
+                className="w-full h-full object-cover"
+                controls
+                autoPlay
+                playsInline
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }
