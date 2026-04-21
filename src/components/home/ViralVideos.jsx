@@ -7,17 +7,17 @@ import video2 from '../../assets/videos/video2.webm'
 import video3 from '../../assets/videos/video3.webm'
 import video4 from '../../assets/videos/video4.webm'
 
-const V_PATH = '/assets/Portfolio/Fix my home website pictures/Videos importantes para la página'
+const V_PATH = '/assets/portfolio/portfolio-assets/videos-portfolio'
 
 const VIDEOS = [
-  { id: 1, src: `${V_PATH}/compressed_compressed_110k%20patio%20espa%C3%B1ol%20V3.webm`, views: '110K', likes: '5K', type: 'video/webm' },
-  { id: 2, src: `${V_PATH}/20260327_C6085-web.mp4`, views: '88K', likes: '3.2K', type: 'video/mp4' },
-  { id: 3, src: `${V_PATH}/Reel%201.webm`, views: '410K', likes: '30K', type: 'video/webm' },
-  { id: 4, src: `${V_PATH}/Reel%205.webm`, views: '550K', likes: '45K', type: 'video/webm' },
-  { id: 5, src: `${V_PATH}/IMG_0467.webm`, views: '320K', likes: '20K', type: 'video/webm' },
-  { id: 6, src: `${V_PATH}/IMG_0085.webm`, views: '200K', likes: '12K', type: 'video/webm' },
-  { id: 7, src: `${V_PATH}/IMG_0332.webm`, views: '150K', likes: '8K', type: 'video/webm' },
-  { id: 8, src: `${V_PATH}/IMG_0776.webm`, views: '95K', likes: '4K', type: 'video/webm' },
+  { id: 1, src: `${V_PATH}/patio-espanol-v3-optimized.webm`, views: '110K', likes: '5K', type: 'video/webm' },
+  { id: 2, src: `${V_PATH}/reel-c6085-optimized.mp4`, views: '88K', likes: '3.2K', type: 'video/mp4' },
+  { id: 3, src: `${V_PATH}/reel-1.webm`, views: '410K', likes: '30K', type: 'video/webm' },
+  { id: 4, src: `${V_PATH}/reel-5.webm`, views: '550K', likes: '45K', type: 'video/webm' },
+  { id: 5, src: `${V_PATH}/img-0467.webm`, views: '320K', likes: '20K', type: 'video/webm' },
+  { id: 6, src: `${V_PATH}/img-0085.webm`, views: '200K', likes: '12K', type: 'video/webm' },
+  { id: 7, src: `${V_PATH}/img-0332.webm`, views: '150K', likes: '8K', type: 'video/webm' },
+  { id: 8, src: `${V_PATH}/img-0776.webm`, views: '95K', likes: '4K', type: 'video/webm' },
   { id: 9, src: video1, views: '1.2M', likes: '84K', type: 'video/webm' },
   { id: 10, src: video2, views: '840K', likes: '52K', type: 'video/webm' },
   { id: 11, src: video3, views: '2.1M', likes: '120K', type: 'video/webm' },
@@ -153,13 +153,13 @@ export default function ViralVideos() {
               className="relative w-full h-[85vh] max-w-[65vh] rounded-[2rem] overflow-hidden bg-slate-900 shadow-2xl"
             >
               <video 
-                src={activeVideo.src} 
-                type={activeVideo.type || 'video/mp4'}
                 className="w-full h-full object-cover"
                 controls
                 autoPlay
                 playsInline
-              />
+              >
+                <source src={activeVideo.src} type={activeVideo.type || 'video/mp4'} />
+              </video>
             </motion.div>
           </motion.div>
         )}

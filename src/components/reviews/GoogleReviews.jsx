@@ -101,12 +101,13 @@ export default function GoogleReviews({ placeId = "homefix_id", apiKey = "" }) {
             >
               <div className="relative w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all bg-slate-900 border-2 border-slate-800">
                 <video
-                  src="/assets/Portfolio/Fix%20my%20home%20website%20pictures/Videos%20importantes%20para%20la%20p%C3%A1gina/Reel%201.webm"
                   className="w-full h-full object-cover"
                   controls
                   controlsList="nodownload"
                   playsInline
-                />
+                >
+                  <source src="/assets/portfolio/portfolio-assets/videos-portfolio/reel-1.webm" type="video/webm" />
+                </video>
               </div>
               <p className="text-center font-bold text-slate-700 mt-3">Client Testimonial</p>
             </motion.div>
@@ -121,12 +122,13 @@ export default function GoogleReviews({ placeId = "homefix_id", apiKey = "" }) {
             >
               <div className="relative w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all bg-slate-900 border-2 border-slate-800">
                 <video
-                  src="/assets/Portfolio/Fix%20my%20home%20website%20pictures/Videos%20importantes%20para%20la%20p%C3%A1gina/Reel%205.webm"
                   className="w-full h-full object-cover"
                   controls
                   controlsList="nodownload"
                   playsInline
-                />
+                >
+                  <source src="/assets/portfolio/portfolio-assets/videos-portfolio/reel-5.webm" type="video/webm" />
+                </video>
               </div>
               <p className="text-center font-bold text-slate-700 mt-3">Client Testimonial</p>
             </motion.div>
