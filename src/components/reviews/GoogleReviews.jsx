@@ -101,7 +101,7 @@ export default function GoogleReviews({ placeId = "homefix_id", apiKey = "" }) {
             >
               <div className="relative w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all bg-slate-900 border-2 border-slate-800">
                 <video
-                  src="/assets/Video1.webm"
+                  src="/assets/Portfolio/Fix%20my%20home%20website%20pictures/Videos%20importantes%20para%20la%20p%C3%A1gina/Reel%201.webm"
                   className="w-full h-full object-cover"
                   controls
                   controlsList="nodownload"
@@ -121,7 +121,7 @@ export default function GoogleReviews({ placeId = "homefix_id", apiKey = "" }) {
             >
               <div className="relative w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all bg-slate-900 border-2 border-slate-800">
                 <video
-                  src="/assets/Video2.webm"
+                  src="/assets/Portfolio/Fix%20my%20home%20website%20pictures/Videos%20importantes%20para%20la%20p%C3%A1gina/Reel%205.webm"
                   className="w-full h-full object-cover"
                   controls
                   controlsList="nodownload"

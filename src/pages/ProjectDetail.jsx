@@ -218,7 +218,7 @@ export default function ProjectDetail() {
                     playsInline
                     autoPlay
                   >
-                    <source src={video.src} type="video/mp4" />
+                    <source src={video.src} type={video.src.toLowerCase().endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
                   </video>
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
