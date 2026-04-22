@@ -18,21 +18,11 @@ export default function Portfolio() {
 
   return (
     <div className="bg-white min-h-screen pt-32 pb-20">
-
+      {/*
       {/* ── HERO SECTION ────────────────────────────────────────────────── */}
       <section className="mb-24 px-6 sm:px-8 lg:px-10">
         <div className="container mx-auto">
           <div className="max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6"
-            >
-              <div className="h-px w-10 bg-blue-600" />
-              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em] text-blue-600">
-                Our Work
-              </span>
-            </motion.div>
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -40,60 +30,13 @@ export default function Portfolio() {
               transition={{ delay: 0.1 }}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-950 mb-8 uppercase italic tracking-tighter leading-tight"
             >
-              Masterpieces <br /><span className="text-blue-600">In Houston</span>
+              Our featured<br /><span className="text-blue-600">Works</span>
             </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-base sm:text-lg md:text-xl text-slate-500 font-light max-w-2xl leading-relaxed italic"
-            >
-              A curated collection of visionary transformations. Every line, stone, and beam reflects our commitment to architectural excellence.
-            </motion.p>
+
           </div>
         </div>
       </section>
-
-      {/* ── BEFORE / AFTER SHOWCASE ──────────────────────────────────────── */}
-      <section className="mb-32 px-6">
-        <div className="container mx-auto">
-          <div className="flex flex-col lg:flex-row gap-16 items-center">
-            <div className="lg:w-1/2">
-              <div className="mb-10">
-                <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 mb-2 block">Real Transformations</span>
-                <h2 className="text-4xl font-black uppercase tracking-tighter text-slate-950 italic mb-6">
-                  See The <br /><span className="text-blue-600">Architectural Shift</span>
-                </h2>
-                <p className="text-slate-500 font-light leading-relaxed mb-8">
-                  Drag the slider to compare the original state with our final execution. We don't just build; we reimagine the entire outdoor experience with precision engineering and high-end materials.
-                </p>
-
-                <div className="space-y-4">
-                  {[
-                    { label: 'Project', val: 'Luxury Gable Extension' },
-                    { label: 'Scope', val: 'New Roof, Flooring & Columns' },
-                    { label: 'Design', val: 'Modern Resilience System' }
-                  ].map((inf, i) => (
-                    <div key={i} className="flex items-center gap-6 py-4 border-b border-slate-100">
-                      <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 w-20">{inf.label}</span>
-                      <span className="font-bold text-slate-900">{inf.val}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:w-1/2 w-full">
-              <BeforeAfterSlider
-                beforeImg="/assets/patio-before-sample.jpg"
-                afterImg="/assets/patio-after-sample.jpg"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── PROJECT CATEGORIES GRID ──────────────────────────────────────── */}
       <section className="px-6 sm:px-8 lg:px-10">
         <div className="container mx-auto">
